@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/miAnasayfa"
+        android:icon="@drawable/home_black"
+        android:title="" />
+    <item
+        android:id="@+id/miOkumaListesi"
+        android:icon="@drawable/icon_book"
+        android:title="" />
+    <item
+        android:id="@+id/miDuvar"
+        android:icon="@drawable/icon_message"
+        android:title="" />
+    <item
+        android:id="@+id/miAra"
+        android:icon="@drawable/search_black"
+        android:title="" />
+    <item
+        android:id="@+id/miMyProfile"
+        android:icon="@drawable/user_black"
+        android:title="" />
+</menu>

@@ -10,5 +10,7 @@
     <color name="text">#D1D1D1</color>
     <color name="bg_cl">#121212</color>
 
+    <color name="bnv_icon_tint">#FFFFFF</color>
+    <color name="bnv_bg_tint">#121212</color>
 
 </resources>
