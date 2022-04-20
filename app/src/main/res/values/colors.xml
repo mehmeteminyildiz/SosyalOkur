@@ -12,6 +12,7 @@
 
     <color name="bnv_icon_tint">#000000</color>
     <color name="bnv_bg_tint">#FFFFFF</color>
+    <color name="yatay_cizgi">#DDDDDD</color>
 
 
 </resources>
