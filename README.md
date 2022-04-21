@@ -3,7 +3,7 @@
 Sosyal Okur;
 kitapseverlerin, okuduğu kitaplardan ***alıntılar*** paylaşabildiği, ***okuma listeleri*** oluşturabildiği, diğer kitapseverler ile ***sohbet*** edebileceği bir mobil uygulamadır.
 
-Mobil geliştirme projesi olarak başlandı ancak proje tesliminden sonra da geliştirilmeye devam edilmesi planlanmaktadır.
+Java ile Android Geliştirme dersi projesi olarak başlandı ancak proje tesliminden sonra da geliştirilmeye devam edilmesi planlanmaktadır.
 
 ### Kullanılan Teknolojiler
 * Java ile Android Studio ortamın
