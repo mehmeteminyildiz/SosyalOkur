@@ -106,7 +106,7 @@ public class FragmentAra extends Fragment {
                 if (secim) {
                     Toast.makeText(getContext(), "Yazar Aranacak!", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getContext(), "Kitap Aranacak!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Kitap Adranacak!", Toast.LENGTH_SHORT).show();
                     if (i == EditorInfo.IME_ACTION_SEARCH) {
                         Log.e("TAG", "Keyboard'tan Ara Tuşu: " + tietAramaEkrani.getText().toString().trim());
                         hideKeyboard(imm);
