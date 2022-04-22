@@ -27,7 +27,6 @@ public class FragmentOkumaListesi extends Fragment {
     private ArrayList<Kitap> kitapArrayList;
     private OkumaListesiAdapter adapter;
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -72,7 +71,5 @@ public class FragmentOkumaListesi extends Fragment {
         rv.setAdapter(null);
         adapter = new OkumaListesiAdapter(getContext(), kitapArrayList);
         rv.setAdapter(adapter);
-
-
     }
 }

@@ -7,10 +7,13 @@
         <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/drawable/ic_message.xml" value="0.2526041666666667" />
         <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/card_alinti_tasarim.xml" value="0.264" />
+        <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/card_ara_kitap_tasarim.xml" value="0.264" />
+        <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/card_ara_tasarim.xml" value="0.23645833333333333" />
+        <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/card_ara_yazar_tasarim.xml" value="0.264" />
         <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/card_duvar_mesaj_tasarim.xml" value="0.264" />
         <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/card_okuma_listesi_tasarim.xml" value="0.264" />
         <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/fragment_anasayfa.xml" value="0.23645833333333333" />
-        <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/fragment_ara.xml" value="0.23645833333333333" />
+        <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/fragment_ara.xml" value="0.264" />
         <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/fragment_duvar.xml" value="0.23645833333333333" />
         <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/fragment_my_profile.xml" value="0.23645833333333333" />
         <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/fragment_okuma_listesi.xml" value="0.23645833333333333" />

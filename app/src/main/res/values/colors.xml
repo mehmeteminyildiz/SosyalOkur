@@ -14,5 +14,7 @@
     <color name="bnv_bg_tint">#FFFFFF</color>
     <color name="yatay_cizgi">#DDDDDD</color>
 
+    <color name="secili_yazi">#000000</color>
+    <color name="secili_olmayan_yazi">#8C8C8C</color>
 
 </resources>
