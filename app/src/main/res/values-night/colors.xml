@@ -17,4 +17,6 @@
     <color name="secili_yazi">#000000</color>
     <color name="secili_olmayan_yazi">#8C8C8C</color>
 
+    <color name="silinecek_eleman">#FFAEAE</color>
+
 </resources>

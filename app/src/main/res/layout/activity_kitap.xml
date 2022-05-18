@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.KitapActivity">
+
+    <TextView
+        android:id="@+id/tvKitapAdi"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center"
+        android:text="Beyaz Zambaklar Ülkesinde"
+        android:textColor="@color/text"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageButton" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="#FFFFFF"
+        android:tint="#000000"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/icon_back" />
+
+    <TextView
+        android:id="@+id/tvKitapAciklama"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="sans-serif-light"
+        android:text="İrade Terbiyesi, tüm zamanların en çok farklı dile çevrilen kitapları arasındadır. Yazıldığı dönemde hayli ses getirmiş ve kısa sürede baskı üstüne baskı yapmıştır. Cemil Meriç; “Disiplin içinde çalışmayı bu kitaptan öğrendim” der onun için. Ali Fuat Başgil ise şu sözleriyle onun değerini pekiştirir: “Mösyö Girard bize bir kitap tavsiye etti ve mutlaka okumamızı söyledi. Bu, Aix-Marseille Üniversitesi rektörü Jules Payot’un İrade Terbiyesi adlı kitabıydı. Ertesi gün şehre inerek kitabı aldım, ihtiyar bir meşenin dibine oturarak okumaya koyuldum. Okudukça, içimde özlem ve pişmanlıkla karışık, belli belirsiz bir acı duymaya başladım. Kendi kendime, ah bu kitap on sekiz, yirmi yaşlarımdayken elime geçmeliydi, böyle bir kitabı okumakta geciktiğim için üzülüyordum.” Fransızca aslından yapılan elinizdeki bu özgün ve titiz çevirisiyle İrade Terbiyesi, böylece Türk okurunun hak ettiği niteliğe kavuşmuş oluyor."
+        android:textColor="@color/text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvKitapAdi" />
+</androidx.constraintlayout.widget.ConstraintLayout>

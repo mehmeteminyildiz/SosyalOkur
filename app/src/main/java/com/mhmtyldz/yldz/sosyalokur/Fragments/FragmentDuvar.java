@@ -50,15 +50,21 @@ public class FragmentDuvar extends Fragment {
         String mesaj = "Merhaba bence uygulama çok güzel olmuş. Uzun zamandır bu kadar " +
                 "zevk aldığım ve bilgi edindiğim bir uygulama olmamıştı.";
         duvarArrayList.add(new Duvar(1, 1, mesaj, "20.04.2022",
-                "mhmtyldz", "alien1"));
+                "mhmtyldz", "alien1", 1));
         duvarArrayList.add(new Duvar(1, 1, mesaj, "20.04.2022",
-                "mhmtyldz", "alien1"));
+                "mhmtyldz", "alien1", 1));
         duvarArrayList.add(new Duvar(1, 1, mesaj, "20.04.2022",
-                "mhmtyldz", "alien1"));
+                "mhmtyldz", "alien1", 1));
         duvarArrayList.add(new Duvar(1, 1, mesaj, "20.04.2022",
-                "mhmtyldz", "alien1"));
+                "mhmtyldz", "alien1", 1));
         duvarArrayList.add(new Duvar(1, 1, mesaj, "20.04.2022",
-                "mhmtyldz", "alien1"));
+                "mhmtyldz", "alien1", 1));
+        duvarArrayList.add(new Duvar(1, 1, mesaj, "20.04.2022",
+                "mhmtyldz", "alien1", 1));duvarArrayList.add(new Duvar(1, 1, mesaj, "20.04.2022",
+                "mhmtyldz", "alien1", 1));
+        duvarArrayList.add(new Duvar(1, 1, mesaj, "20.04.2022",
+                "mhmtyldz", "alien1", 1));
+
 
         rv.setAdapter(null);
         adapter = new DuvarMesajAdapter(getContext(), duvarArrayList);

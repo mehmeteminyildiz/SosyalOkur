@@ -1,6 +1,7 @@
 package com.mhmtyldz.yldz.sosyalokur.Fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +13,20 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.mhmtyldz.yldz.sosyalokur.Adapters.AlintiAdapter;
 import com.mhmtyldz.yldz.sosyalokur.R;
 import com.mhmtyldz.yldz.sosyalokur.Siniflar.Alinti;
+import com.mhmtyldz.yldz.sosyalokur.Siniflar.Kitap;
+import com.mhmtyldz.yldz.sosyalokur.Siniflar.Yazar;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -40,7 +52,7 @@ public class FragmentAnasayfa extends Fragment {
         rv.addItemDecoration(dividerItemDecoration);
 
         alintiArrayList = new ArrayList<>();
-        alintilariGoster();
+        getAlintilar();
 
 
         return rootView;
@@ -51,24 +63,81 @@ public class FragmentAnasayfa extends Fragment {
                 " bildikleri için en kötü günlerinde bile, hatta birbirlerine en acımasız" +
                 " ve yanlış şeyleri istemeden yaparlarken bile, içlerinde hiç bitmeyen bir" +
                 " teselli duygusu taşırlar.\"";
-        alintiArrayList.add(new Alinti(1, 1, 1, alintiMetni, "Baslik", "17.04.2022",
-                "alien1", "mhmtyldz", "Nutuk", "Mustafa Kemal Ataturk"));
-        alintiArrayList.add(new Alinti(1, 1, 1, alintiMetni, "Baslik", "17.04.2022",
-                "alien1", "mhmtyldz", "Nutuk", "Mustafa Kemal Ataturk"));
-        alintiArrayList.add(new Alinti(1, 1, 1, alintiMetni, "Baslik", "17.04.2022",
-                "alien1", "mhmtyldz", "Nutuk", "Mustafa Kemal Ataturk"));
-        alintiArrayList.add(new Alinti(1, 1, 1, alintiMetni, "Baslik", "17.04.2022",
-                "alien1", "mhmtyldz", "Nutuk", "Mustafa Kemal Ataturk"));
-        alintiArrayList.add(new Alinti(1, 1, 1, alintiMetni, "Baslik", "17.04.2022",
-                "alien1", "mhmtyldz", "Nutuk", "Mustafa Kemal Ataturk"));
-        alintiArrayList.add(new Alinti(1, 1, 1, alintiMetni, "Baslik", "17.04.2022",
-                "alien1", "mhmtyldz", "Nutuk", "Mustafa Kemal Ataturk"));
-        alintiArrayList.add(new Alinti(1, 1, 1, alintiMetni, "Baslik", "17.04.2022",
-                "alien1", "mhmtyldz", "Nutuk", "Mustafa Kemal Ataturk"));
+        Yazar yazar = new Yazar(1, "Jules", "Payot");
+        Kitap kitap = new Kitap(1, "İrade Terbiyesi", yazar);
+        alintiArrayList.add(new Alinti(1, 1, "ugur_bebe", "resim1",
+                kitap, alintiMetni, "Alıntı Başlığı", "15.05.2022 16:39"));
 
         rv.setAdapter(null);
         adapter = new AlintiAdapter(getContext(), alintiArrayList);
         rv.setAdapter(adapter);
+
+    }
+
+    private void getAlintilar() { // çok paylaşım olur ve kasma olursa LAZY LOADING araştıralım.
+
+        String url = "https://mehmetemin.xyz/sosyalOkur/getAlintilar.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray ALINTILAR = jsonObject.getJSONArray("alintilar"); // tablo adı
+
+                    for (int i = 0; i < ALINTILAR.length(); i++) {
+                        JSONObject alintilarjsonObject = ALINTILAR.getJSONObject(i);
+
+                        int ALINTI_ID = alintilarjsonObject.getInt("ALINTI_ID");
+                        int KULLANICI_ID = alintilarjsonObject.getInt("KULLANICI_ID");
+                        int KITAP_ID = alintilarjsonObject.getInt("KITAP_ID");
+                        String ALINTI_METNI = alintilarjsonObject.getString("ALINTI_METNI");
+                        String ALINTI_BASLIGI = alintilarjsonObject.getString("ALINTI_BASLIGI");
+                        String ALINTI_TARIHI = alintilarjsonObject.getString("ALINTI_TARIHI");
+                        String KULLANICI_ADI = alintilarjsonObject.getString("KULLANICI_ADI");
+                        String KITAP_ADI = alintilarjsonObject.getString("KITAP_ADI");
+                        String YAZAR_SOYADI = alintilarjsonObject.getString("YAZAR_SOYADI");
+                        String YAZAR_ADI = alintilarjsonObject.getString("YAZAR_ADI");
+                        String PIC_NAME = alintilarjsonObject.getString("PIC_NAME");
+                        int YAZAR_ID = alintilarjsonObject.getInt("YAZAR_ID");
+
+
+                        Yazar yazar = new Yazar(YAZAR_ID, YAZAR_ADI, YAZAR_SOYADI);
+                        Kitap kitap = new Kitap(KITAP_ID, KITAP_ADI, yazar);
+
+                        Alinti alinti = new Alinti(ALINTI_ID, KULLANICI_ID, KULLANICI_ADI, PIC_NAME,
+                                kitap, ALINTI_METNI, ALINTI_BASLIGI, ALINTI_TARIHI);
+
+                        Log.e("TAG", "Alıntı: " + alinti.getAlinti_resim_ad());
+
+                        alintiArrayList.add(alinti);
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+
+                }
+                verileriYerlestir(alintiArrayList);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+
+            }
+        });
+
+        Volley.newRequestQueue(getActivity().getApplicationContext()).add(stringRequest);
+    }
+
+    private void verileriYerlestir(ArrayList<Alinti> alintiArrayList) {
+            ////Log.e("TAG", "verileriYerlestir: " + paylasimArrayList);
+            rv.setAdapter(null);
+            // Collections.reverse(paylasimArrayList); bu şekilde yeniye doğru sıralamak yanlış bence.
+            // Onun yerine MySQL'den çekerken order by kullanmalıyız.
+            adapter = new AlintiAdapter(getContext(), alintiArrayList);
+            rv.setAdapter(adapter);
+            //progressBar.setVisibility(View.INVISIBLE);
 
 
     }

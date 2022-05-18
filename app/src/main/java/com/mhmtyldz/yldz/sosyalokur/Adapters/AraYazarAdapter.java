@@ -1,11 +1,9 @@
 package com.mhmtyldz.yldz.sosyalokur.Adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,24 +16,23 @@ import com.mhmtyldz.yldz.sosyalokur.Siniflar.Yazar;
 
 import java.util.List;
 
-public class AraKitapAdapter extends RecyclerView.Adapter<AraKitapAdapter.CardViewTasarimNesneleriniTutucu> {
+public class AraYazarAdapter extends RecyclerView.Adapter<AraYazarAdapter.CardViewTasarimNesneleriniTutucu>  {
 
     private Context mContext;
-    private List<Kitap> kitapList;
+    private List<Yazar> yazarList;
 
-    public AraKitapAdapter(Context mContext, List<Kitap> kitapList) {
+    public AraYazarAdapter(Context mContext, List<Yazar> yazarList) {
         this.mContext = mContext;
-        this.kitapList = kitapList;
+        this.yazarList = yazarList;
     }
 
     public class CardViewTasarimNesneleriniTutucu extends RecyclerView.ViewHolder {
 
-        public TextView tvKitapAdi, tvYazarAdi;
+        public TextView tvYazarAdi;
         public ConstraintLayout cl;
 
         public CardViewTasarimNesneleriniTutucu(View itemView) {
             super(itemView);
-            tvKitapAdi = itemView.findViewById(R.id.tvKitapAdi);
             tvYazarAdi = itemView.findViewById(R.id.tvYazarAdi);
             cl = itemView.findViewById(R.id.cl);
 
@@ -48,20 +45,20 @@ public class AraKitapAdapter extends RecyclerView.Adapter<AraKitapAdapter.CardVi
         }
     }
 
+
     @NonNull
     @Override
-    public CardViewTasarimNesneleriniTutucu onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_ara_kitap_tasarim, parent, false);
+    public AraYazarAdapter.CardViewTasarimNesneleriniTutucu onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_ara_yazar_tasarim, parent, false);
 
         return new CardViewTasarimNesneleriniTutucu(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CardViewTasarimNesneleriniTutucu holder, int position) {
+    public void onBindViewHolder(@NonNull AraYazarAdapter.CardViewTasarimNesneleriniTutucu holder, int position) {
 
-        final Kitap kitap = kitapList.get(position);
-        holder.tvKitapAdi.setText(kitap.getKitap_adi().trim());
-        holder.tvYazarAdi.setText(kitap.getYazar().getAd().trim());
+        final Yazar yazar = yazarList.get(position);
+        holder.tvYazarAdi.setText(yazar.getAd().trim() + " " + yazar.getSoyad().trim());
 
         // kitap detay sayfası hazır olunca bunu kullanalım
 //        holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -78,8 +75,7 @@ public class AraKitapAdapter extends RecyclerView.Adapter<AraKitapAdapter.CardVi
 
     @Override
     public int getItemCount() { // 09.12.2021... Burada return 0 kalmış yanlışlıkla. 30 dakikadır bunun yüzünden çalışmadı program!
-        return kitapList.size();
+        return yazarList.size();
     }
-
 
 }

@@ -9,6 +9,15 @@ public class Duvar implements Serializable {
     private String tarih;
     private String kullaniciAdi;
     private String resimAd;
+    private int konu_id;
+
+    public int getKonu_id() {
+        return konu_id;
+    }
+
+    public void setKonu_id(int konu_id) {
+        this.konu_id = konu_id;
+    }
 
     public String getResimAd() {
         return resimAd;
@@ -26,13 +35,14 @@ public class Duvar implements Serializable {
         this.kullaniciAdi = kullaniciAdi;
     }
 
-    public Duvar(int id, int kullanici_id, String mesaj, String tarih, String kullaniciAdi, String resimAd) {
+    public Duvar(int id, int kullanici_id, String mesaj, String tarih, String kullaniciAdi, String resimAd, int konu_id) {
         this.id = id;
         this.kullanici_id = kullanici_id;
         this.mesaj = mesaj;
         this.tarih = tarih;
         this.kullaniciAdi = kullaniciAdi;
         this.resimAd = resimAd;
+        this.konu_id = konu_id;
     }
 
     public int getId() {

@@ -26,11 +26,16 @@
 
             <TextView
                 android:id="@+id/tvKullaniciAdi"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="sans-serif-black"
+                android:padding="5dp"
                 android:text="mhmtyldz"
+                android:textColor="#000000"
                 app:layout_constraintBottom_toBottomOf="@+id/imgProfilResmi"
+                app:layout_constraintEnd_toStartOf="@+id/tvAlintiTarihi"
                 app:layout_constraintStart_toEndOf="@+id/imgProfilResmi"
                 app:layout_constraintTop_toTopOf="@+id/imgProfilResmi" />
 
@@ -39,10 +44,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:fontFamily="sans-serif-black"
                 android:text="Yazar burada çok güzel özetlemiş bence"
                 android:textColor="#000000"
                 android:textSize="16sp"
-                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@+id/tvAlintiTarihi"
                 app:layout_constraintStart_toStartOf="@+id/imgProfilResmi"
                 app:layout_constraintTop_toBottomOf="@+id/imgProfilResmi" />
@@ -52,6 +57,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif-light"
                 android:text="Günlük yaşamdayken huzurun önemini unutabiliyoruz. Halbuki huzurlu bir dönemimizde değilsek bu tüm hayatımızı..."
                 android:textColor="#000000"
                 app:layout_constraintEnd_toEndOf="@+id/tvAlintiBaslik"
@@ -63,7 +69,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif-light"
                 android:text="Beyaz Zambaklar Ülkesinde"
+                android:textColor="#000000"
                 app:layout_constraintEnd_toEndOf="@+id/tvAlintiMetin"
                 app:layout_constraintStart_toStartOf="@+id/tvAlintiMetin"
                 app:layout_constraintTop_toBottomOf="@+id/tvAlintiMetin" />
@@ -74,7 +82,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="16dp"
+                android:fontFamily="sans-serif-light"
                 android:text="- Gregory Petrov"
+                android:textColor="#000000"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/tvKitapAdi"
                 app:layout_constraintStart_toStartOf="@+id/tvKitapAdi"
@@ -85,7 +95,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
+                android:fontFamily="sans-serif-light"
                 android:text="17.04.2022"
+                android:textColor="#000000"
                 app:layout_constraintBottom_toBottomOf="@+id/tvKullaniciAdi"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tvKullaniciAdi" />

@@ -24,8 +24,10 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.mhmtyldz.yldz.sosyalokur.Adapters.AraKitapAdapter;
+import com.mhmtyldz.yldz.sosyalokur.Adapters.AraYazarAdapter;
 import com.mhmtyldz.yldz.sosyalokur.R;
 import com.mhmtyldz.yldz.sosyalokur.Siniflar.Kitap;
+import com.mhmtyldz.yldz.sosyalokur.Siniflar.Yazar;
 
 import java.util.ArrayList;
 
@@ -36,10 +38,12 @@ public class FragmentAra extends Fragment {
     private Switch mySwitch;
 
     private TextInputLayout tilAramaEkrani;
-    private RecyclerView rvKitapListesi;
+    private RecyclerView rv;
     private EditText tietAramaEkrani;
     private ArrayList<Kitap> kitapArrayList;
+    private ArrayList<Yazar> yazarArrayList;
     private AraKitapAdapter kitapAdapter;
+    private AraYazarAdapter yazarAdapter;
     private TextView tvKitap, tvYazar;
 
     @Nullable
@@ -50,16 +54,18 @@ public class FragmentAra extends Fragment {
         mySwitch = rootView.findViewById(R.id.mySwitch);
         tilAramaEkrani = rootView.findViewById(R.id.tilAramaEkrani);
         tietAramaEkrani = rootView.findViewById(R.id.tietAramaEkrani);
-        rvKitapListesi = rootView.findViewById(R.id.rv);
+        rv = rootView.findViewById(R.id.rv);
         tvKitap = rootView.findViewById(R.id.tvKitap);
         tvYazar = rootView.findViewById(R.id.tvYazar);
 
         tvKitap.setTextColor(getResources().getColor(R.color.black));
 
-        rvKitapListesi.setHasFixedSize(true);
-        rvKitapListesi.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
+        rv.setHasFixedSize(true);
+        rv.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().getApplicationContext().INPUT_METHOD_SERVICE);
+
         kitapArrayList = new ArrayList<>();
+        yazarArrayList = new ArrayList<>();
 
         tietAramaEkrani.addTextChangedListener(new TextWatcher() {
             @Override
@@ -86,6 +92,11 @@ public class FragmentAra extends Fragment {
 
                 if (secim) { // true: yazar aranacak
                     Toast.makeText(getContext(), "Yazar aranacak", Toast.LENGTH_SHORT).show();
+                    hideKeyboard(imm);
+                    tietAramaEkrani.clearFocus(); // verileri alıp bunları ListView içinde göstermeliyiz.
+                    String aramaMetni = tietAramaEkrani.getText().toString().trim();
+                    aramaMetni = aramaMetni.replace("'", "`");
+                    getYazarlarByYazarAdi(aramaMetni);
                 } else {  // false: kitap aranacak
                     Toast.makeText(getContext(), "Kitap aranacak", Toast.LENGTH_SHORT).show();
                     Log.e("TAG", "ICON'dan Ara Tuşu: " + tietAramaEkrani.getText().toString().trim());
@@ -105,6 +116,18 @@ public class FragmentAra extends Fragment {
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (secim) {
                     Toast.makeText(getContext(), "Yazar Aranacak!", Toast.LENGTH_SHORT).show();
+
+                    if (i == EditorInfo.IME_ACTION_SEARCH) {
+                        Log.e("TAG", "Keyboard'tan Ara Tuşu: " + tietAramaEkrani.getText().toString().trim());
+                        hideKeyboard(imm);
+                        tietAramaEkrani.clearFocus(); // verileri alıp bunları ListView içinde göstermeliyiz.
+                        String aramaMetni = tietAramaEkrani.getText().toString().trim();
+                        aramaMetni = aramaMetni.replace("'", "`");
+                        getYazarlarByYazarAdi(aramaMetni);
+
+                        return true;
+                    }
+
                 } else {
                     Toast.makeText(getContext(), "Kitap Adranacak!", Toast.LENGTH_SHORT).show();
                     if (i == EditorInfo.IME_ACTION_SEARCH) {
@@ -144,6 +167,42 @@ public class FragmentAra extends Fragment {
         return rootView;
     }
 
+    private void getYazarlarByYazarAdi(String aramaMetni) {
+        Toast.makeText(getContext(), "Yazar: " + aramaMetni, Toast.LENGTH_SHORT).show();
+        if (aramaMetni.equals("")) {
+            tilAramaEkrani.setError("Bir yazar adı girmelisin!");
+        } else {
+
+            if (yazarArrayList.size() > 0) {
+                yazarArrayList.clear();
+                yazarAdapter.notifyDataSetChanged();
+            }
+
+            // burada DB'den verileri getirmeliyiz.
+
+            if (aramaMetni.equals("a")) {
+                yazarArrayList = new ArrayList<>();
+                yazarArrayList.add(new Yazar(1, "Jules", "Payot"));
+                yazarArrayList.add(new Yazar(1, "Jules", "Payot"));
+                yazarArrayList.add(new Yazar(1, "Jules", "Payot"));
+                yazarArrayList.add(new Yazar(1, "Jules", "Payot"));
+                yazarArrayList.add(new Yazar(1, "Jules", "Payot"));
+            } else {
+                yazarArrayList = new ArrayList<>();
+
+                yazarArrayList.add(new Yazar(1, "A" ,"B"));
+                yazarArrayList.add(new Yazar(1, "A" ,"B"));
+                yazarArrayList.add(new Yazar(1, "A" ,"B"));
+                yazarArrayList.add(new Yazar(1, "A" ,"B"));
+                yazarArrayList.add(new Yazar(1, "A" ,"B"));
+            }
+
+
+            verileriYerlestirYazar(yazarArrayList);
+
+        }
+    }
+
     private void getKitaplarByKitapAdi(String aramaMetni) {
         if (aramaMetni.equals("")) {
             tilAramaEkrani.setError("Bir kullanıcı adı girmelisin!");
@@ -157,34 +216,49 @@ public class FragmentAra extends Fragment {
             // burada DB'den verileri getirmeliyiz.
 
             if (aramaMetni.equals("a")) {
+                Yazar yazar = new Yazar(1, "İlber", "Ortaylı");
                 kitapArrayList = new ArrayList<>();
-                kitapArrayList.add(new Kitap(1, "Nutuk", 1, "Mustafa Kemal Atatürk"));
-                kitapArrayList.add(new Kitap(1, "Nutuk", 1, "Mustafa Kemal Atatürk"));
-                kitapArrayList.add(new Kitap(1, "Nutuk", 1, "Mustafa Kemal Atatürk"));
-                kitapArrayList.add(new Kitap(1, "Nutuk", 1, "Mustafa Kemal Atatürk"));
-                kitapArrayList.add(new Kitap(1, "Nutuk", 1, "Mustafa Kemal Atatürk"));
+                kitapArrayList.add(new Kitap(1, "Nutuk", yazar));
+                kitapArrayList.add(new Kitap(1, "Nutuk", yazar));
+                kitapArrayList.add(new Kitap(1, "Nutuk", yazar));
+                kitapArrayList.add(new Kitap(1, "Nutuk", yazar));
+                kitapArrayList.add(new Kitap(1, "Nutuk", yazar));
             } else {
+                Yazar yazar = new Yazar(1, "İlber", "Ortaylı");
                 kitapArrayList = new ArrayList<>();
-                kitapArrayList.add(new Kitap(1, "B", 1, "CCCC"));
-                kitapArrayList.add(new Kitap(1, "B", 1, "CCC"));
-                kitapArrayList.add(new Kitap(1, "B", 1, "CCC"));
-                kitapArrayList.add(new Kitap(1, "B", 1, "CCC"));
-                kitapArrayList.add(new Kitap(1, "B", 1, "CCC"));
+                kitapArrayList.add(new Kitap(1, "B", yazar));
+                kitapArrayList.add(new Kitap(1, "B", yazar));
+                kitapArrayList.add(new Kitap(1, "B", yazar));
+                kitapArrayList.add(new Kitap(1, "B", yazar));
+                kitapArrayList.add(new Kitap(1, "B", yazar));
             }
 
 
-            verileriYerlestir(kitapArrayList);
+            verileriYerlestirKitap(kitapArrayList);
 
         }
     }
 
-    private void verileriYerlestir(ArrayList<Kitap> kitapArrayList) {
-        rvKitapListesi.setAdapter(null);
+    private void verileriYerlestirKitap(ArrayList<Kitap> kitapArrayList) {
+        rv.setAdapter(null);
 
         kitapAdapter = new AraKitapAdapter(getActivity().getApplicationContext(), kitapArrayList);
-        rvKitapListesi.setAdapter(kitapAdapter);
+        rv.setAdapter(kitapAdapter);
 
         if (kitapArrayList.size() <= 0) {
+            Toast.makeText(getContext(), "Bulunamadı", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), "Bulundu!", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+    private void verileriYerlestirYazar(ArrayList<Yazar> yazarArrayList) {
+        rv.setAdapter(null);
+
+        yazarAdapter = new AraYazarAdapter(getActivity().getApplicationContext(), yazarArrayList);
+        rv.setAdapter(yazarAdapter);
+
+        if (yazarArrayList.size() <= 0) {
             Toast.makeText(getContext(), "Bulunamadı", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getContext(), "Bulundu!", Toast.LENGTH_SHORT).show();

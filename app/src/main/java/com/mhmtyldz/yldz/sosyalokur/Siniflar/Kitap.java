@@ -6,14 +6,13 @@ public class Kitap implements Serializable {
 
     private int id;
     private String kitap_adi;
-    private int yazar_id;
-    private String yazar_adi;
+    private Yazar yazar;
 
-    public Kitap(int id, String kitap_adi, int yazar_id, String yazar_adi) {
+
+    public Kitap(int id, String kitap_adi, Yazar yazar) {
         this.id = id;
         this.kitap_adi = kitap_adi;
-        this.yazar_id = yazar_id;
-        this.yazar_adi = yazar_adi;
+        this.yazar = yazar;
     }
 
     public int getId() {
@@ -32,19 +31,11 @@ public class Kitap implements Serializable {
         this.kitap_adi = kitap_adi;
     }
 
-    public int getYazar_id() {
-        return yazar_id;
+    public Yazar getYazar() {
+        return yazar;
     }
 
-    public void setYazar_id(int yazar_id) {
-        this.yazar_id = yazar_id;
-    }
-
-    public String getYazar_adi() {
-        return yazar_adi;
-    }
-
-    public void setYazar_adi(String yazar_adi) {
-        this.yazar_adi = yazar_adi;
+    public void setYazar(Yazar yazar) {
+        this.yazar = yazar;
     }
 }
