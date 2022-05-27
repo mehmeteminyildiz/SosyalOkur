@@ -6,13 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".Activities.KitapActivity">
 
+    <ImageButton
+        android:id="@+id/imgBack"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="#FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/icon_back"
+        app:tint="#000000" />
+
     <TextView
         android:id="@+id/tvKitapAdi"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
+        android:fontFamily="sans-serif-medium"
         android:gravity="center"
         android:text="Beyaz Zambaklar Ülkesinde"
         android:textColor="@color/text"
@@ -20,33 +33,69 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton" />
-
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:background="#FFFFFF"
-        android:tint="#000000"
-
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/icon_back" />
+        app:layout_constraintTop_toBottomOf="@+id/imgBack" />
 
     <TextView
-        android:id="@+id/tvKitapAciklama"
+        android:id="@+id/tvKitapOzeti"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:fontFamily="sans-serif-light"
+        android:fontFamily="sans-serif"
         android:text="İrade Terbiyesi, tüm zamanların en çok farklı dile çevrilen kitapları arasındadır. Yazıldığı dönemde hayli ses getirmiş ve kısa sürede baskı üstüne baskı yapmıştır. Cemil Meriç; “Disiplin içinde çalışmayı bu kitaptan öğrendim” der onun için. Ali Fuat Başgil ise şu sözleriyle onun değerini pekiştirir: “Mösyö Girard bize bir kitap tavsiye etti ve mutlaka okumamızı söyledi. Bu, Aix-Marseille Üniversitesi rektörü Jules Payot’un İrade Terbiyesi adlı kitabıydı. Ertesi gün şehre inerek kitabı aldım, ihtiyar bir meşenin dibine oturarak okumaya koyuldum. Okudukça, içimde özlem ve pişmanlıkla karışık, belli belirsiz bir acı duymaya başladım. Kendi kendime, ah bu kitap on sekiz, yirmi yaşlarımdayken elime geçmeliydi, böyle bir kitabı okumakta geciktiğim için üzülüyordum.” Fransızca aslından yapılan elinizdeki bu özgün ve titiz çevirisiyle İrade Terbiyesi, böylece Türk okurunun hak ettiği niteliğe kavuşmuş oluyor."
         android:textColor="@color/text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvYazarAdi" />
+
+    <Button
+        android:id="@+id/btnAlintilariGoster"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Alıntıları Göster"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.50"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvKitapOzeti" />
+
+    <ImageView
+        android:id="@+id/imgOkumaListemeEkle"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imgBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imgBack"
+        app:srcCompat="@drawable/icon_book_outlined"
+        app:tint="#000000" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnAlintilariGoster" />
+
+    <TextView
+        android:id="@+id/tvYazarAdi"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif-light"
+        android:gravity="end"
+        android:text="Gregory Petrov"
+        android:textColor="@color/text"
+        app:layout_constraintEnd_toEndOf="@+id/tvKitapAdi"
+        app:layout_constraintStart_toStartOf="@+id/tvKitapAdi"
         app:layout_constraintTop_toBottomOf="@+id/tvKitapAdi" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

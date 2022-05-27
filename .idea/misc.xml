@@ -5,22 +5,32 @@
       <map>
         <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/drawable/divider_recyclerview.xml" value="0.2526041666666667" />
         <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/drawable/ic_message.xml" value="0.2526041666666667" />
+        <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/drawable/icon_book_2.xml" value="0.2526041666666667" />
+        <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/drawable/icon_quote_rounded.xml" value="0.2526041666666667" />
         <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/drawable/message_selector.xml" value="0.2526041666666667" />
+        <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/activity_alinti_ekle.xml" value="0.264" />
+        <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/activity_forgot_password.xml" value="0.23645833333333333" />
         <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/activity_kitap.xml" value="0.264" />
+        <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/activity_kitap_ekle.xml" value="0.23645833333333333" />
+        <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/activity_login.xml" value="0.264" />
         <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/activity_main.xml" value="0.264" />
-        <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/activity_profile.xml" value="0.23645833333333333" />
-        <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/activity_yazar.xml" value="0.22083333333333333" />
+        <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/activity_profile.xml" value="0.264" />
+        <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/activity_register.xml" value="0.23645833333333333" />
+        <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/activity_splash_screen.xml" value="0.2328125" />
+        <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/activity_yazar.xml" value="0.264" />
         <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/card_alinti_tasarim.xml" value="0.264" />
         <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/card_ara_kitap_tasarim.xml" value="0.264" />
         <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/card_ara_tasarim.xml" value="0.23645833333333333" />
         <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/card_ara_yazar_tasarim.xml" value="0.264" />
         <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/card_duvar_mesaj_tasarim.xml" value="0.264" />
         <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/card_okuma_listesi_tasarim.xml" value="0.264" />
+        <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/card_profile_tasarim.xml" value="0.4" />
+        <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/dialog_kitap_ekle.xml" value="0.23645833333333333" />
         <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/fragment_anasayfa.xml" value="0.264" />
         <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/fragment_ara.xml" value="0.264" />
         <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/fragment_dashboard.xml" value="0.23645833333333333" />
-        <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/fragment_duvar.xml" value="0.23645833333333333" />
-        <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/fragment_my_profile.xml" value="0.23645833333333333" />
+        <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/fragment_duvar.xml" value="0.264" />
+        <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/fragment_my_profile.xml" value="0.264" />
         <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/layout/fragment_okuma_listesi.xml" value="0.23645833333333333" />
         <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/menu/bottom_nav_menu.xml" value="0.23645833333333333" />
         <entry key="..\:/calismalar/Okul/SosyalOkur/Project/app/src/main/res/menu/popup_okuma_listesi_.xml" value="0.23645833333333333" />
@@ -32,5 +42,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.4" />
+      </ProjectState>
+    </option>
   </component>
 </project>

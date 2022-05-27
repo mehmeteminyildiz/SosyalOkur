@@ -89,15 +89,20 @@ public class AlintiAdapter extends RecyclerView.Adapter<AlintiAdapter.CardViewTa
         private void kullaniciProfilineGit() {
             Toast.makeText(mContext, "Card Nesnesine Tıklandı!" + tvKullaniciAdi.getText().toString().trim(), Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(mContext, ProfileActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
             intent.putExtra("kullanici_adi", tvKullaniciAdi.getText().toString().trim());
             Log.e("TAG", "gonderilen: " + tvKullaniciAdi.getText().toString().trim());
 
             mContext.startActivity(intent);
+
         }
 
         private void kitapGit() {
             Toast.makeText(mContext, "Card Nesnesine Tıklandı!" + tvKullaniciAdi.getText().toString().trim(), Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(mContext, KitapActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
             intent.putExtra("kitap_adi", tvKitapAdi.getText().toString().trim());
             Log.e("TAG", "gonderilen: " + tvKitapAdi.getText().toString().trim());
 
@@ -107,6 +112,8 @@ public class AlintiAdapter extends RecyclerView.Adapter<AlintiAdapter.CardViewTa
         private void yazarGit() {
             Toast.makeText(mContext, "Card Nesnesine Tıklandı!" + tvKullaniciAdi.getText().toString().trim(), Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(mContext, YazarActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
             intent.putExtra("yazar_adi", tvYazarAdi.getText().toString().trim());
             Log.e("TAG", "gonderilen: " + tvYazarAdi.getText().toString().trim());
 

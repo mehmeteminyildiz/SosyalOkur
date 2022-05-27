@@ -13,6 +13,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SosyalOkur">
         <activity
+            android:name=".Activities.ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.AlintiEkleActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activities.YazarActivity"
             android:exported="false" />
         <activity
@@ -23,8 +35,11 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.SplashScreenActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan|stateHidden">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

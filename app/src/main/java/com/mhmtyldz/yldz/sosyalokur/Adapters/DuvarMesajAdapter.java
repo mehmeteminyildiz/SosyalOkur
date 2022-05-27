@@ -1,6 +1,7 @@
 package com.mhmtyldz.yldz.sosyalokur.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mhmtyldz.yldz.sosyalokur.Activities.ProfileActivity;
 import com.mhmtyldz.yldz.sosyalokur.R;
 import com.mhmtyldz.yldz.sosyalokur.Siniflar.Duvar;
 import com.mhmtyldz.yldz.sosyalokur.Siniflar.Kitap;
@@ -46,7 +48,31 @@ public class DuvarMesajAdapter extends RecyclerView.Adapter<DuvarMesajAdapter.Ca
             tvKullaniciAdi = itemView.findViewById(R.id.tvKullaniciAdi);
             tvMesaj = itemView.findViewById(R.id.tvMesaj);
             tvTarih = itemView.findViewById(R.id.tvTarih);
+
+            imgDuvarProfilResmi.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String kullanici_adi = tvKullaniciAdi.getText().toString().trim();
+                    kullaniciProfilineGit(kullanici_adi);
+
+
+                }
+            });
+
+            tvKullaniciAdi.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String kullanici_adi = tvKullaniciAdi.getText().toString().trim();
+                    kullaniciProfilineGit(kullanici_adi);
+                }
+            });
         }
+    }
+
+    private void kullaniciProfilineGit(String kullanici_adi) {
+        Intent intent = new Intent(mContext, ProfileActivity.class);
+        intent.putExtra("kullanici_adi", kullanici_adi);
+        mContext.startActivity(intent);
     }
 
 

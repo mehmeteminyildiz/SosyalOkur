@@ -58,6 +58,7 @@ public class FragmentAra extends Fragment {
         tvKitap = rootView.findViewById(R.id.tvKitap);
         tvYazar = rootView.findViewById(R.id.tvYazar);
 
+
         tvKitap.setTextColor(getResources().getColor(R.color.black));
 
         rv.setHasFixedSize(true);
@@ -66,6 +67,7 @@ public class FragmentAra extends Fragment {
 
         kitapArrayList = new ArrayList<>();
         yazarArrayList = new ArrayList<>();
+
 
         tietAramaEkrani.addTextChangedListener(new TextWatcher() {
             @Override
@@ -105,6 +107,8 @@ public class FragmentAra extends Fragment {
                     String aramaMetni = tietAramaEkrani.getText().toString().trim();
                     aramaMetni = aramaMetni.replace("'", "`");
                     getKitaplarByKitapAdi(aramaMetni);
+
+
                 }
 
 
@@ -124,6 +128,7 @@ public class FragmentAra extends Fragment {
                         String aramaMetni = tietAramaEkrani.getText().toString().trim();
                         aramaMetni = aramaMetni.replace("'", "`");
                         getYazarlarByYazarAdi(aramaMetni);
+
 
                         return true;
                     }
@@ -163,8 +168,29 @@ public class FragmentAra extends Fragment {
             }
         });
 
+        kitapAdapter = new AraKitapAdapter(getActivity().getApplicationContext(), kitapArrayList);
+        yazarAdapter = new AraYazarAdapter(getActivity().getApplicationContext(), yazarArrayList);
+
+        getPopulerKitaplar();
 
         return rootView;
+    }
+
+    private void getPopulerKitaplar() {
+        kitapArrayList.clear();
+        // burada DB'den verileri getirmeliyiz.
+        kitapAdapter.notifyDataSetChanged();
+        kitapArrayList = new ArrayList<>();
+
+        Yazar yazar = new Yazar(1, "Yazar Adı", "Soyadı");
+        kitapArrayList.add(new Kitap(1, "Popüler Kitap - 1", yazar));
+        kitapArrayList.add(new Kitap(1, "Popüler Kitap - 2", yazar));
+        kitapArrayList.add(new Kitap(1, "Popüler Kitap - 3", yazar));
+        kitapArrayList.add(new Kitap(1, "Popüler Kitap - 4", yazar));
+
+
+        verileriYerlestirKitap(kitapArrayList);
+
     }
 
     private void getYazarlarByYazarAdi(String aramaMetni) {
@@ -172,29 +198,27 @@ public class FragmentAra extends Fragment {
         if (aramaMetni.equals("")) {
             tilAramaEkrani.setError("Bir yazar adı girmelisin!");
         } else {
+            tietAramaEkrani.setText("");
+            yazarArrayList.clear();
 
-            if (yazarArrayList.size() > 0) {
-                yazarArrayList.clear();
-                yazarAdapter.notifyDataSetChanged();
-            }
 
             // burada DB'den verileri getirmeliyiz.
+            yazarAdapter.notifyDataSetChanged();
+            yazarArrayList = new ArrayList<>();
 
             if (aramaMetni.equals("a")) {
-                yazarArrayList = new ArrayList<>();
                 yazarArrayList.add(new Yazar(1, "Jules", "Payot"));
                 yazarArrayList.add(new Yazar(1, "Jules", "Payot"));
                 yazarArrayList.add(new Yazar(1, "Jules", "Payot"));
                 yazarArrayList.add(new Yazar(1, "Jules", "Payot"));
                 yazarArrayList.add(new Yazar(1, "Jules", "Payot"));
             } else {
-                yazarArrayList = new ArrayList<>();
 
-                yazarArrayList.add(new Yazar(1, "A" ,"B"));
-                yazarArrayList.add(new Yazar(1, "A" ,"B"));
-                yazarArrayList.add(new Yazar(1, "A" ,"B"));
-                yazarArrayList.add(new Yazar(1, "A" ,"B"));
-                yazarArrayList.add(new Yazar(1, "A" ,"B"));
+                yazarArrayList.add(new Yazar(1, "A", "B"));
+                yazarArrayList.add(new Yazar(1, "A", "B"));
+                yazarArrayList.add(new Yazar(1, "A", "B"));
+                yazarArrayList.add(new Yazar(1, "A", "B"));
+                yazarArrayList.add(new Yazar(1, "A", "B"));
             }
 
 
@@ -205,19 +229,18 @@ public class FragmentAra extends Fragment {
 
     private void getKitaplarByKitapAdi(String aramaMetni) {
         if (aramaMetni.equals("")) {
-            tilAramaEkrani.setError("Bir kullanıcı adı girmelisin!");
+            tilAramaEkrani.setError("Bir yazar adı girmelisin!");
         } else {
-
-            if (kitapArrayList.size() > 0) {
-                kitapArrayList.clear();
-                kitapAdapter.notifyDataSetChanged();
-            }
+            tietAramaEkrani.setText("");
+            kitapArrayList.clear();
 
             // burada DB'den verileri getirmeliyiz.
 
+            kitapAdapter.notifyDataSetChanged();
+            kitapArrayList = new ArrayList<>();
+
             if (aramaMetni.equals("a")) {
                 Yazar yazar = new Yazar(1, "İlber", "Ortaylı");
-                kitapArrayList = new ArrayList<>();
                 kitapArrayList.add(new Kitap(1, "Nutuk", yazar));
                 kitapArrayList.add(new Kitap(1, "Nutuk", yazar));
                 kitapArrayList.add(new Kitap(1, "Nutuk", yazar));
@@ -225,7 +248,6 @@ public class FragmentAra extends Fragment {
                 kitapArrayList.add(new Kitap(1, "Nutuk", yazar));
             } else {
                 Yazar yazar = new Yazar(1, "İlber", "Ortaylı");
-                kitapArrayList = new ArrayList<>();
                 kitapArrayList.add(new Kitap(1, "B", yazar));
                 kitapArrayList.add(new Kitap(1, "B", yazar));
                 kitapArrayList.add(new Kitap(1, "B", yazar));
@@ -241,8 +263,9 @@ public class FragmentAra extends Fragment {
 
     private void verileriYerlestirKitap(ArrayList<Kitap> kitapArrayList) {
         rv.setAdapter(null);
-
         kitapAdapter = new AraKitapAdapter(getActivity().getApplicationContext(), kitapArrayList);
+
+
         rv.setAdapter(kitapAdapter);
 
         if (kitapArrayList.size() <= 0) {
@@ -252,6 +275,7 @@ public class FragmentAra extends Fragment {
 
         }
     }
+
     private void verileriYerlestirYazar(ArrayList<Yazar> yazarArrayList) {
         rv.setAdapter(null);
 

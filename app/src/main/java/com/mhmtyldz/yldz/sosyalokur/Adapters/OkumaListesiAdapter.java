@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mhmtyldz.yldz.sosyalokur.R;
@@ -86,12 +87,15 @@ public class OkumaListesiAdapter extends RecyclerView.Adapter<OkumaListesiAdapte
                 }
             });
 
+
             cl.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     Toast.makeText(mContext, "Siliniyor...", Toast.LENGTH_SHORT).show();
 
                     cl.setBackgroundColor(mContext.getResources().getColor(R.color.silinecek_eleman));
+                    tvKitapAdi.setTextColor(mContext.getResources().getColor(R.color.white));
+                    tvYazarAdi.setTextColor(mContext.getResources().getColor(R.color.white));
 
 
                     deleteFromOkumaListesiDB("email", kitapList.get(getAdapterPosition()).getKitap_adi().trim());
@@ -183,7 +187,7 @@ public class OkumaListesiAdapter extends RecyclerView.Adapter<OkumaListesiAdapte
     public void onBindViewHolder(@NonNull CardViewTasarimNesneleriniTutucu holder, int position) {
         final Kitap kitap = kitapList.get(position);
         holder.tvKitapAdi.setText(kitap.getKitap_adi());
-        holder.tvYazarAdi.setText(kitap.getYazar().getAd());
+        holder.tvYazarAdi.setText(kitap.getYazar().getAd() + " " + kitap.getYazar().getSoyad());
     }
 
     @Override

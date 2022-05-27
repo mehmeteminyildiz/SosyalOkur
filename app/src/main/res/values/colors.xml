@@ -17,6 +17,111 @@
     <color name="secili_yazi">#000000</color>
     <color name="secili_olmayan_yazi">#8C8C8C</color>
 
-    <color name="silinecek_eleman">#FFAEAE</color>
+    <color name="silinecek_eleman">#730000</color>
+
+<!--    -->
+    <color name="yazi_rengi">#000000</color>
+    <color name="yazi_dark">#FFFFFF</color>
+
+    <color name="cl_bg">#FFFFFF</color>
+    <color name="sayfa_baslik">#000000</color>
+    <color name="mesaj_yakinda">#000000</color>
+
+    <color name="card_paylasim_bg">#FFFFFF</color>
+    <color name="card_paylasim_yazilar">#000000</color>
+    <color name="card_paylasim_pp_border">#000000</color>
+    <color name="card_paylasim_tarih">#9C9C9C</color>
+    <color name="devamini_oku">#FF018786</color>
+
+    <color name="progressbar">#000000</color>
+    <color name="icon_renkleri">#000000</color>
+    <color name="kategori_bg">#000000</color>
+    <color name="kategori_text">#FFFFFF</color>
+
+    <color name="back_image">#000000</color>
+    <color name="buton_bg">#FF018786</color>
+    <color name="buton_text">#FFFFFF</color>
+
+    <color name="transparan">#00FFFFFF</color>
+
+    <color name="card_bildirim_bg">#FFFFFF</color>
+    <color name="card_bildirim_kullanici_adi">#000000</color>
+    <color name="card_bildirim_detay">#808080</color>
+    <color name="bildirim_yok">#818181</color>
+
+    <color name="yardim_ok">#000000</color>
+    <color name="yardim_metni">#000000</color>
+    <color name="yardim_cevap">#474747</color>
+
+    <color name="kesfet_ara_icon">#000000</color>
+    <color name="kesfet_ara_tie_bg">#FFFFFF</color>
+    <color name="kesfet_ara_til_hint">#616161</color>
+    <color name="kesfet_ates_icon">#FFFFFF</color>
+
+    <color name="ht_name">#000000</color>
+    <color name="ht_adet">#000000</color>
+
+    <color name="paylasim_goster">#000000</color>
+    <color name="card_profil_bg">#222222</color>
+    <color name="card_profil_text">#FFFFFF</color>
+    <color name="card_profil_biyo">#DCFFFFFF</color>
+    <color name="card_profil_pen">#FFFFFF</color>
+    <color name="card_profil_border">#FFFFFF</color>
+
+    <color name="arama_ekrani_text">#000000</color>
+    <color name="arama_ekrani_hint">#474747</color>
+
+    <color name="card_kullanici_search_bg">#FFFFFF</color>
+    <color name="card_kullanici_search_border">#000000</color>
+    <color name="card_kullanici_search_text">#000000</color>
+
+    <color name="sikayet_bg">#FFFFFF</color>
+    <color name="sikayet_text">#000000</color>
+    <color name="sikayet_hint">#4A4A4A</color>
+    <color name="sikayet_yes">#FF018786</color>
+    <color name="sikayet_no">#87011C</color>
+
+    <color name="card_detay_metin">#000000</color>
+    <color name="bildirim_detay_aciklama">#505050</color>
+
+    <color name="btn_gunluk_bg">#404B69</color>
+    <color name="btn_gunluk_text">#FFFFFF</color>
+    <color name="btn_aylik_bg">#A9333A</color>
+    <color name="btn_aylik_text">#FFFFFF</color>
+
+    <color name="profil_edit_text_color">#000000</color>
+    <color name="profil_edit_biyo_bg">#FFFFFF</color>
+
+    <color name="yorum_yap_et_bg">#FFFFFF</color>
+    <color name="yorum_yap_et_text">#000000</color>
+    <color name="card_yorum_bg">#FFFFFF</color>
+    <color name="card_yorum_text">#000000</color>
+    <color name="yorum_yap_gonder">#000000</color>
+    <color name="yorum_yap_hint">#4C4C4C</color>
+
+    <color name="spinner_bg">#FFFFFF</color>
+    <color name="spinner_border">#000000</color>
+    <color name="spinner_text">#000000</color>
+
+    <color name="register_hint">#FF018786</color>
+    <color name="register_et_bg">#FFFFFF</color>
+    <color name="register_et_text">#000000</color>
+    <color name="register_zaten_var_text">#000000</color>
+
+    <color name="login_btn_bg">#FF018786</color>
+    <color name="login_btn_text">#FFFFFF</color>
+    <color name="login_register_btn_bg">#FFFFFF</color>
+    <color name="login_register_btn_text">#FF018786</color>
+    <color name="login_register_btn_stroke">#000000</color>
+    <color name="login_veya_text">#8A8A8A</color>
+    <color name="login_veya_line">#B5B5B5</color>
+    <color name="forgot_til_bg">#000000</color>
+
+    <color name="ht_rengi">#FF018786</color>
+
+    <color name="btn_takip_et_bg">#FFFFFF</color>
+    <color name="btn_takip_et_text">#000000</color>
+    <color name="btn_takipten_cik_bg">#6C0000</color>
+    <color name="btn_takipten_cik_text">#FFFFFF</color>
 
 </resources>

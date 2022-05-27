@@ -58,21 +58,6 @@ public class FragmentAnasayfa extends Fragment {
         return rootView;
     }
 
-    private void alintilariGoster() {
-        String alintiMetni = "\"Bizim gibi sevgililer,hiçbir şeyin aşklarını bitiremeyeceğini" +
-                " bildikleri için en kötü günlerinde bile, hatta birbirlerine en acımasız" +
-                " ve yanlış şeyleri istemeden yaparlarken bile, içlerinde hiç bitmeyen bir" +
-                " teselli duygusu taşırlar.\"";
-        Yazar yazar = new Yazar(1, "Jules", "Payot");
-        Kitap kitap = new Kitap(1, "İrade Terbiyesi", yazar);
-        alintiArrayList.add(new Alinti(1, 1, "ugur_bebe", "resim1",
-                kitap, alintiMetni, "Alıntı Başlığı", "15.05.2022 16:39"));
-
-        rv.setAdapter(null);
-        adapter = new AlintiAdapter(getContext(), alintiArrayList);
-        rv.setAdapter(adapter);
-
-    }
 
     private void getAlintilar() { // çok paylaşım olur ve kasma olursa LAZY LOADING araştıralım.
 
@@ -107,7 +92,7 @@ public class FragmentAnasayfa extends Fragment {
                         Alinti alinti = new Alinti(ALINTI_ID, KULLANICI_ID, KULLANICI_ADI, PIC_NAME,
                                 kitap, ALINTI_METNI, ALINTI_BASLIGI, ALINTI_TARIHI);
 
-                        Log.e("TAG", "Alıntı: " + alinti.getAlinti_resim_ad());
+                        //Log.e("TAG", "Alıntı: " + alinti.getAlinti_resim_ad());
 
                         alintiArrayList.add(alinti);
 
@@ -115,7 +100,6 @@ public class FragmentAnasayfa extends Fragment {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-
                 }
                 verileriYerlestir(alintiArrayList);
             }
@@ -131,13 +115,13 @@ public class FragmentAnasayfa extends Fragment {
     }
 
     private void verileriYerlestir(ArrayList<Alinti> alintiArrayList) {
-            ////Log.e("TAG", "verileriYerlestir: " + paylasimArrayList);
-            rv.setAdapter(null);
-            // Collections.reverse(paylasimArrayList); bu şekilde yeniye doğru sıralamak yanlış bence.
-            // Onun yerine MySQL'den çekerken order by kullanmalıyız.
-            adapter = new AlintiAdapter(getContext(), alintiArrayList);
-            rv.setAdapter(adapter);
-            //progressBar.setVisibility(View.INVISIBLE);
+        ////Log.e("TAG", "verileriYerlestir: " + paylasimArrayList);
+        rv.setAdapter(null);
+        // Collections.reverse(paylasimArrayList); bu şekilde yeniye doğru sıralamak yanlış bence.
+        // Onun yerine MySQL'den çekerken order by kullanmalıyız.
+        adapter = new AlintiAdapter(getContext(), alintiArrayList);
+        rv.setAdapter(adapter);
+        //progressBar.setVisibility(View.INVISIBLE);
 
 
     }

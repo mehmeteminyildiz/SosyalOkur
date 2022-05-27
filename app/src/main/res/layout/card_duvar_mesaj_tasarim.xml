@@ -17,11 +17,12 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imgDuvarProfilResmi"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:src="@drawable/alien1"
+                android:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,13 +45,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
                 android:text="Merhaba bence uygulama çok güzel olmuş. Uzun zamandır bu kadar zevk aldığım ve bilgi edindiğim bir uygulama olmamıştı."
                 android:textColor="#404040"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/tvKullaniciAdi"
+                app:layout_constraintEnd_toEndOf="@+id/tvTarih"
+                app:layout_constraintStart_toStartOf="@+id/imgDuvarProfilResmi"
                 app:layout_constraintTop_toBottomOf="@+id/tvKullaniciAdi" />
 
             <TextView

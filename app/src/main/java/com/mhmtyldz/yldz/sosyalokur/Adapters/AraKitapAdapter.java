@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mhmtyldz.yldz.sosyalokur.Activities.KitapActivity;
 import com.mhmtyldz.yldz.sosyalokur.R;
 import com.mhmtyldz.yldz.sosyalokur.Siniflar.Kitap;
 import com.mhmtyldz.yldz.sosyalokur.Siniflar.Yazar;
@@ -63,16 +64,16 @@ public class AraKitapAdapter extends RecyclerView.Adapter<AraKitapAdapter.CardVi
         holder.tvKitapAdi.setText(kitap.getKitap_adi().trim());
         holder.tvYazarAdi.setText(kitap.getYazar().getAd().trim());
 
-        // kitap detay sayfası hazır olunca bunu kullanalım
-//        holder.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(mContext, KitapDetayActivity.class);
-//                intent.putExtra("tiklanilan_kitap_adi", holder.tvKitapAdi.getText().toString().trim());
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // yeni activity'e geçerken kullandık
-//                mContext.startActivity(intent);
-//            }
-//        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, KitapActivity.class);
+                intent.putExtra("kitap_adi", holder.tvKitapAdi.getText().toString().trim());
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // yeni activity'e geçerken kullandık
+                mContext.startActivity(intent);
+            }
+        });
 
     }
 

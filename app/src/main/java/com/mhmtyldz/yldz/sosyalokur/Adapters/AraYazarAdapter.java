@@ -1,6 +1,7 @@
 package com.mhmtyldz.yldz.sosyalokur.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mhmtyldz.yldz.sosyalokur.Activities.YazarActivity;
 import com.mhmtyldz.yldz.sosyalokur.R;
 import com.mhmtyldz.yldz.sosyalokur.Siniflar.Kitap;
 import com.mhmtyldz.yldz.sosyalokur.Siniflar.Yazar;
@@ -61,15 +63,15 @@ public class AraYazarAdapter extends RecyclerView.Adapter<AraYazarAdapter.CardVi
         holder.tvYazarAdi.setText(yazar.getAd().trim() + " " + yazar.getSoyad().trim());
 
         // kitap detay sayfası hazır olunca bunu kullanalım
-//        holder.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(mContext, KitapDetayActivity.class);
-//                intent.putExtra("tiklanilan_kitap_adi", holder.tvKitapAdi.getText().toString().trim());
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // yeni activity'e geçerken kullandık
-//                mContext.startActivity(intent);
-//            }
-//        });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, YazarActivity.class);
+                intent.putExtra("yazar_adi", holder.tvYazarAdi.getText().toString().trim());
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // yeni activity'e geçerken kullandık
+                mContext.startActivity(intent);
+            }
+        });
 
     }
 
