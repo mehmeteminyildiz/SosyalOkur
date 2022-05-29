@@ -7,7 +7,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -20,10 +23,13 @@ import com.mhmtyldz.yldz.sosyalokur.R;
 import com.mhmtyldz.yldz.sosyalokur.Siniflar.Kitap;
 import com.mhmtyldz.yldz.sosyalokur.Siniflar.Yazar;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class YazarActivity extends AppCompatActivity {
-    private String gelenYazarAdi;
+    private String gelenYazarAd;
+    private String gelenYazarSoyad;
     private TextView tvYazarAdi, tvYazarBiyografi;
     private RecyclerView rv;
     private CardView cardView;
@@ -35,18 +41,19 @@ public class YazarActivity extends AppCompatActivity {
 
     private ImageButton imgBack;
 
+    // Load image from URL işlemleri
+    Handler mainHandler = new Handler();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_yazar);
 
-        tasarimNesneleriniBaslat();
-        yazarAdiniAl();
         kitapArrayList = new ArrayList<>();
         kitapAdapter = new AraKitapAdapter(getApplicationContext(), kitapArrayList);
+        tasarimNesneleriniBaslat();
 
-        getYazarBilgileriveKitaplari(gelenYazarAdi);
 
 
 
@@ -78,7 +85,7 @@ public class YazarActivity extends AppCompatActivity {
 
 
     private void tasarimNesneleriniBaslat() {
-        tvYazarAdi = findViewById(R.id.tvYazarAdi);
+        tvYazarAdi = findViewById(R.id.tvYazarAd);
         tvYazarBiyografi = findViewById(R.id.tvOkumaListesiSayisi);
         rv = findViewById(R.id.rv);
         cardView = findViewById(R.id.cardView);
@@ -95,24 +102,34 @@ public class YazarActivity extends AppCompatActivity {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.divider_recyclerview));
         rv.addItemDecoration(dividerItemDecoration);
+
+        yazarAdiniAl();
+
     }
 
     private void yazarAdiniAl() {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        gelenYazarAdi = bundle.getString("yazar_adi");
-        tvYazarAdi.setText(gelenYazarAdi);
+        gelenYazarAd = bundle.getString("yazar_adi");
+        gelenYazarSoyad = bundle.getString("yazar_soyadi");
+        tvYazarAdi.setText(gelenYazarAd + " " + gelenYazarSoyad);
+
+        getYazarBilgileriveKitaplari(gelenYazarAd);
+
     }
 
     private void getYazarBilgileriveKitaplari(String gelenYazarAdi) {
+        // load image:
+        String url = "https://mehmetemin.xyz/images/mehmet_photo.jpeg";
+        new FetchImage(url).start();
+
         //
         Toast.makeText(this, "aranıyor: " + gelenYazarAdi, Toast.LENGTH_SHORT).show();
         kitapArrayList.clear();
         // burada DB'den verileri getirmeliyiz.
         kitapAdapter.notifyDataSetChanged();
         kitapArrayList = new ArrayList<>();
-
-        Yazar yazar = new Yazar(1, gelenYazarAdi, gelenYazarAdi);
+        Yazar yazar = new Yazar(1, gelenYazarAdi, gelenYazarSoyad,url);
         kitapArrayList.add(new Kitap(1, "Yazarın Kitabı - 1", yazar));
         kitapArrayList.add(new Kitap(1, "Yazarın Kitabı - 2", yazar));
         kitapArrayList.add(new Kitap(1, "Yazarın Kitabı - 3", yazar));
@@ -131,14 +148,51 @@ public class YazarActivity extends AppCompatActivity {
     private void verileriYerlestirKitap(ArrayList<Kitap> kitapArrayList) {
         rv.setAdapter(null);
         kitapAdapter = new AraKitapAdapter(getApplicationContext(), kitapArrayList);
-
-
         rv.setAdapter(kitapAdapter);
 
         if (kitapArrayList.size() <= 0) {
             Toast.makeText(this, "Bulunamadı", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Bulundu!", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+    class FetchImage extends Thread {
+        String URL;
+        Bitmap bitmap;
+
+        FetchImage(String URL) {
+            this.URL = URL;
+        }
+
+        @Override
+        public void run() {
+
+            mainHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(YazarActivity.this, "Yükleniyor...", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+
+            InputStream inputStream = null;
+            try {
+                inputStream = new java.net.URL(URL).openStream();
+                bitmap = BitmapFactory.decodeStream(inputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            mainHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(YazarActivity.this, "Yüklendi!", Toast.LENGTH_SHORT).show();
+                    imgPp.setImageBitmap(bitmap);
+                }
+            });
+
 
         }
     }

@@ -13,12 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mhmtyldz.yldz.sosyalokur.Activities.YazarActivity;
 import com.mhmtyldz.yldz.sosyalokur.R;
-import com.mhmtyldz.yldz.sosyalokur.Siniflar.Kitap;
 import com.mhmtyldz.yldz.sosyalokur.Siniflar.Yazar;
 
 import java.util.List;
 
-public class AraYazarAdapter extends RecyclerView.Adapter<AraYazarAdapter.CardViewTasarimNesneleriniTutucu>  {
+import de.hdodenhof.circleimageview.CircleImageView;
+
+public class AraYazarAdapter extends RecyclerView.Adapter<AraYazarAdapter.CardViewTasarimNesneleriniTutucu> {
 
     private Context mContext;
     private List<Yazar> yazarList;
@@ -30,20 +31,13 @@ public class AraYazarAdapter extends RecyclerView.Adapter<AraYazarAdapter.CardVi
 
     public class CardViewTasarimNesneleriniTutucu extends RecyclerView.ViewHolder {
 
-        public TextView tvYazarAdi;
+        public TextView tvYazarAd;
         public ConstraintLayout cl;
 
         public CardViewTasarimNesneleriniTutucu(View itemView) {
             super(itemView);
-            tvYazarAdi = itemView.findViewById(R.id.tvYazarAdi);
+            tvYazarAd = itemView.findViewById(R.id.tvYazarAd);
             cl = itemView.findViewById(R.id.cl);
-
-            itemView.setOnClickListener(new View.OnClickListener() { // Card Nesnesine dokunulursa:
-                @Override
-                public void onClick(View v) {
-                    //Toast.makeText(mContext, "Card Nesnesine Tıklandı!", Toast.LENGTH_SHORT).show();
-                }
-            });
         }
     }
 
@@ -60,14 +54,18 @@ public class AraYazarAdapter extends RecyclerView.Adapter<AraYazarAdapter.CardVi
     public void onBindViewHolder(@NonNull AraYazarAdapter.CardViewTasarimNesneleriniTutucu holder, int position) {
 
         final Yazar yazar = yazarList.get(position);
-        holder.tvYazarAdi.setText(yazar.getAd().trim() + " " + yazar.getSoyad().trim());
+        String yazarAd = yazar.getAd();
+        String yazarSoyad = yazar.getSoyad();
+        holder.tvYazarAd.setText(yazarAd + " " + yazarSoyad);
+
 
         // kitap detay sayfası hazır olunca bunu kullanalım
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, YazarActivity.class);
-                intent.putExtra("yazar_adi", holder.tvYazarAdi.getText().toString().trim());
+                intent.putExtra("yazar_adi", yazarAd);
+                intent.putExtra("yazar_soyadi", yazarSoyad);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // yeni activity'e geçerken kullandık
                 mContext.startActivity(intent);
             }

@@ -2,10 +2,10 @@ package com.mhmtyldz.yldz.sosyalokur.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mhmtyldz.yldz.sosyalokur.Activities.KitapActivity;
 import com.mhmtyldz.yldz.sosyalokur.R;
 import com.mhmtyldz.yldz.sosyalokur.Siniflar.Kitap;
-import com.mhmtyldz.yldz.sosyalokur.Siniflar.Yazar;
 
 import java.util.List;
 
@@ -37,15 +36,10 @@ public class AraKitapAdapter extends RecyclerView.Adapter<AraKitapAdapter.CardVi
         public CardViewTasarimNesneleriniTutucu(View itemView) {
             super(itemView);
             tvKitapAdi = itemView.findViewById(R.id.tvKitapAdi);
-            tvYazarAdi = itemView.findViewById(R.id.tvYazarAdi);
+            tvYazarAdi = itemView.findViewById(R.id.tvYazarAd);
             cl = itemView.findViewById(R.id.cl);
 
-            itemView.setOnClickListener(new View.OnClickListener() { // Card Nesnesine dokunulursa:
-                @Override
-                public void onClick(View v) {
-                    //Toast.makeText(mContext, "Card Nesnesine Tıklandı!", Toast.LENGTH_SHORT).show();
-                }
-            });
+
         }
     }
 
@@ -60,9 +54,11 @@ public class AraKitapAdapter extends RecyclerView.Adapter<AraKitapAdapter.CardVi
     @Override
     public void onBindViewHolder(@NonNull CardViewTasarimNesneleriniTutucu holder, int position) {
 
-        final Kitap kitap = kitapList.get(position);
+        Kitap kitap = kitapList.get(position);
+        String yazarAd = kitap.getYazar().getAd();
+        String yazarSoyad = kitap.getYazar().getSoyad();
         holder.tvKitapAdi.setText(kitap.getKitap_adi().trim());
-        holder.tvYazarAdi.setText(kitap.getYazar().getAd().trim());
+        holder.tvYazarAdi.setText(yazarAd + " " + yazarSoyad);
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +66,8 @@ public class AraKitapAdapter extends RecyclerView.Adapter<AraKitapAdapter.CardVi
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, KitapActivity.class);
                 intent.putExtra("kitap_adi", holder.tvKitapAdi.getText().toString().trim());
+                intent.putExtra("yazar_ad", yazarAd);
+                intent.putExtra("yazar_soyad",yazarSoyad);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // yeni activity'e geçerken kullandık
                 mContext.startActivity(intent);
             }

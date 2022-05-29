@@ -18,6 +18,8 @@
     <color name="secili_olmayan_yazi">#8C8C8C</color>
 
     <color name="silinecek_eleman">#730000</color>
+    <color name="okunmus_eleman">#108C2B</color>
+    <color name="okuma_listesi_yazar">#353535</color>
 
 <!--    -->
     <color name="yazi_rengi">#000000</color>

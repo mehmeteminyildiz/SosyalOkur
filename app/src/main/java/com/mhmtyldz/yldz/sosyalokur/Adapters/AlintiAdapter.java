@@ -35,90 +35,25 @@ public class AlintiAdapter extends RecyclerView.Adapter<AlintiAdapter.CardViewTa
     public class CardViewTasarimNesneleriniTutucu extends RecyclerView.ViewHolder {
         // cardView nesnelerini Adapter'a burası sayesinde bağlıyoruz...
         public ImageView imgProfilResmi;
-        public TextView tvKullaniciAdi, tvAlintiBaslik, tvAlintiMetin, tvKitapAdi, tvYazarAdi, tvAlintiTarihi;
+        public TextView tvKullaniciAdi, tvAlintiBaslik, tvAlintiMetin, tvKitapAdi, tvYazarAd, tvYazarSoyad, tvAlintiTarihi;
 
 
         public CardViewTasarimNesneleriniTutucu(View itemView) {
             super(itemView);
+            tasarimNesneleriniBaslat();
+        }
+
+        private void tasarimNesneleriniBaslat() {
             imgProfilResmi = itemView.findViewById(R.id.imgProfilResmi);
             tvKullaniciAdi = itemView.findViewById(R.id.tvKullaniciAdi);
             tvAlintiBaslik = itemView.findViewById(R.id.tvAlintiBaslik);
             tvAlintiMetin = itemView.findViewById(R.id.tvAlintiMetin);
             tvKitapAdi = itemView.findViewById(R.id.tvKitapAdi);
-            tvYazarAdi = itemView.findViewById(R.id.tvYazarAdi);
+            tvYazarAd = itemView.findViewById(R.id.tvYazarAd);
+            tvYazarSoyad = itemView.findViewById(R.id.tvYazarSoyad);
             tvAlintiTarihi = itemView.findViewById(R.id.tvAlintiTarihi);
-
-
-            itemView.setOnClickListener(new View.OnClickListener() { // Card Nesnesine dokunulursa:
-                @Override
-                public void onClick(View v) {
-                    //Toast.makeText(mContext, "Card Nesnesine Tıklandı!" + tvKullaniciAdi.getText().toString().trim(), Toast.LENGTH_SHORT).show();
-
-                }
-            });
-            tvKullaniciAdi.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    kullaniciProfilineGit();
-
-                }
-            });
-
-            imgProfilResmi.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    kullaniciProfilineGit();
-
-                }
-            });
-
-            tvKitapAdi.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    kitapGit();
-                }
-            });
-            tvYazarAdi.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    yazarGit();
-                }
-            });
         }
 
-        private void kullaniciProfilineGit() {
-            Toast.makeText(mContext, "Card Nesnesine Tıklandı!" + tvKullaniciAdi.getText().toString().trim(), Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(mContext, ProfileActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            intent.putExtra("kullanici_adi", tvKullaniciAdi.getText().toString().trim());
-            Log.e("TAG", "gonderilen: " + tvKullaniciAdi.getText().toString().trim());
-
-            mContext.startActivity(intent);
-
-        }
-
-        private void kitapGit() {
-            Toast.makeText(mContext, "Card Nesnesine Tıklandı!" + tvKullaniciAdi.getText().toString().trim(), Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(mContext, KitapActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            intent.putExtra("kitap_adi", tvKitapAdi.getText().toString().trim());
-            Log.e("TAG", "gonderilen: " + tvKitapAdi.getText().toString().trim());
-
-            mContext.startActivity(intent);
-        }
-
-        private void yazarGit() {
-            Toast.makeText(mContext, "Card Nesnesine Tıklandı!" + tvKullaniciAdi.getText().toString().trim(), Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(mContext, YazarActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            intent.putExtra("yazar_adi", tvYazarAdi.getText().toString().trim());
-            Log.e("TAG", "gonderilen: " + tvYazarAdi.getText().toString().trim());
-
-            mContext.startActivity(intent);
-        }
     }
 
     @NonNull
@@ -138,8 +73,81 @@ public class AlintiAdapter extends RecyclerView.Adapter<AlintiAdapter.CardViewTa
         holder.tvAlintiBaslik.setText(alinti.getAlinti_baslik());
         holder.tvAlintiMetin.setText(alinti.getAlinti_metni());
         holder.tvKitapAdi.setText(alinti.getKitap().getKitap_adi());
-        holder.tvYazarAdi.setText(alinti.getKitap().getYazar().getAd() + " " + alinti.getKitap().getYazar().getSoyad());
+        holder.tvYazarAd.setText(alinti.getKitap().getYazar().getAd());
+        holder.tvYazarSoyad.setText(alinti.getKitap().getYazar().getSoyad());
         holder.tvAlintiTarihi.setText(alinti.getAlinti_tarihi());
+
+        holder.tvKullaniciAdi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                kullaniciProfilineGit(holder.tvKullaniciAdi);
+            }
+        });
+
+        holder.imgProfilResmi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                kullaniciProfilineGit(holder.tvKullaniciAdi);
+            }
+        });
+
+        holder.tvKitapAdi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                kitapGit(holder.tvKitapAdi, holder.tvYazarAd, holder.tvYazarSoyad);
+            }
+        });
+
+        holder.tvYazarAd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                yazarGit(alinti.getKitap().getYazar().getAd(),
+                        alinti.getKitap().getYazar().getSoyad());
+            }
+        });
+
+        holder.tvYazarSoyad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                yazarGit(alinti.getKitap().getYazar().getAd(),
+                        alinti.getKitap().getYazar().getSoyad());
+            }
+        });
+
+
+    }
+
+    private void yazarGit(String yazarAd, String yazarSoyad) {
+        Intent intent = new Intent(mContext, YazarActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        intent.putExtra("yazar_adi", yazarAd);
+        intent.putExtra("yazar_soyadi", yazarSoyad);
+
+        mContext.startActivity(intent);
+    }
+
+    private void kitapGit(TextView tvKitapAdi, TextView tvYazarAd, TextView tvYazarSoyad) {
+        Intent intent = new Intent(mContext, KitapActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        intent.putExtra("kitap_adi", tvKitapAdi.getText().toString().trim());
+        intent.putExtra("yazar_ad", tvYazarAd.getText().toString().trim());
+        intent.putExtra("yazar_soyad", tvYazarSoyad.getText().toString().trim());
+        Log.e("TAG", "gonderilen: " + tvKitapAdi.getText().toString().trim());
+
+        mContext.startActivity(intent);
+    }
+
+    private void kullaniciProfilineGit(TextView tvKullaniciAdi) {
+        Toast.makeText(mContext, "Card Nesnesine Tıklandı!" + tvKullaniciAdi.getText().toString().trim(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(mContext, ProfileActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        intent.putExtra("kullanici_adi", tvKullaniciAdi.getText().toString().trim());
+        Log.e("TAG", "gonderilen: " + tvKullaniciAdi.getText().toString().trim());
+
+        mContext.startActivity(intent);
     }
 
     @Override

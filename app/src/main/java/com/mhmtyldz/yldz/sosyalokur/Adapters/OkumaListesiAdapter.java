@@ -1,6 +1,7 @@
 package com.mhmtyldz.yldz.sosyalokur.Adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
@@ -19,7 +20,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mhmtyldz.yldz.sosyalokur.R;
@@ -49,117 +49,32 @@ public class OkumaListesiAdapter extends RecyclerView.Adapter<OkumaListesiAdapte
             super(itemView);
             //imgMoreList = itemView.findViewById(R.id.imgMoreList);
             tvKitapAdi = itemView.findViewById(R.id.tvKitapAdi);
-            tvYazarAdi = itemView.findViewById(R.id.tvYazarAdi);
+            tvYazarAdi = itemView.findViewById(R.id.tvYazarAd);
             checkOkudum = itemView.findViewById(R.id.checkOkudum);
             cl = itemView.findViewById(R.id.cl);
-
-            checkOkudum.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) { // işaretlendiyse:
-                        String kitapAdi = tvKitapAdi.getText().toString().trim();
-                        updateOkunmaDurumu("email_adresi", kitapAdi, true);
-                        tvKitapAdi.setPaintFlags(tvKitapAdi.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                        tvYazarAdi.setPaintFlags(tvKitapAdi.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                        sesCal();
-                    } else {     // işaret kaldırıldıysa:
-                        String kitapAdi = tvKitapAdi.getText().toString().trim();
-                        updateOkunmaDurumu("email_adresi", kitapAdi, false);
-                        tvKitapAdi.setPaintFlags(tvKitapAdi.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                        tvYazarAdi.setPaintFlags(tvKitapAdi.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                    }
-                }
-            });
-
-            cl.setOnClickListener(new View.OnClickListener() { // Card Nesnesine dokunulursa:
-                @Override
-                public void onClick(View v) {
-                    checkOkudum.setChecked(!checkOkudum.isChecked());
-                    Toast.makeText(mContext, "CL Tıklandı!", Toast.LENGTH_SHORT).show();
-                    if (checkOkudum.isChecked()) { //
-                        tvKitapAdi.setPaintFlags(tvKitapAdi.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                        tvYazarAdi.setPaintFlags(tvKitapAdi.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    } else {
-                        tvKitapAdi.setPaintFlags(tvKitapAdi.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                        tvYazarAdi.setPaintFlags(tvYazarAdi.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                    }
-
-                }
-            });
-
-
-            cl.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    Toast.makeText(mContext, "Siliniyor...", Toast.LENGTH_SHORT).show();
-
-                    cl.setBackgroundColor(mContext.getResources().getColor(R.color.silinecek_eleman));
-                    tvKitapAdi.setTextColor(mContext.getResources().getColor(R.color.white));
-                    tvYazarAdi.setTextColor(mContext.getResources().getColor(R.color.white));
-
-
-                    deleteFromOkumaListesiDB("email", kitapList.get(getAdapterPosition()).getKitap_adi().trim());
-
-                    kitapList.remove(getAdapterPosition());
-                    notifyItemRemoved(getAdapterPosition());
-
-                    return false;
-                }
-            });
-
-
-//            imgMoreList.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Toast.makeText(mContext, "More!", Toast.LENGTH_SHORT).show();
-//                    showPopup(imgMoreList, kitapList, getAdapterPosition());
-//
-//
-//                }
-//            });
         }
     }
 
-    private void showPopup(ImageView imgMoreList, List<Kitap> kitapList, int adapterPosition) {
-        PopupMenu popupMenu = new PopupMenu(mContext, imgMoreList);
-        MenuInflater inflater = popupMenu.getMenuInflater();
-        inflater.inflate(R.menu.popup_okuma_listesi, popupMenu.getMenu());
-        popupMenu.show();
-
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_sil:
-                        // geçerli kitabı hem rv'den hem de DB'den silmeliyiz.
-                        Toast.makeText(mContext, "Siliniyor...", Toast.LENGTH_SHORT).show();
-
-                        deleteFromOkumaListesiDB("email", kitapList.get(adapterPosition).getKitap_adi().trim());
-
-                        kitapList.remove(adapterPosition);
-                        notifyItemRemoved(adapterPosition);
-
-
-                        return true;
-                    default:
-                }
-                return false;
-            }
-        });
-    }
-
-    private void deleteFromOkumaListesiDB(String email, String kitap_adi) {
+    private void deleteFromOkumaListesiDB(String kitap_adi) {
+        SharedPreferences sp = mContext.getSharedPreferences("girisBilgileri", Context.MODE_PRIVATE);
+        String email = sp.getString("email_adresi", "");
         // burada email ve kitap_adi değerleri gönderilir. Serviste gerekli işlemler yapılır ve
         // okuma listesinden o kitap silinir.
         Log.e("TAG", "deleteFromOkumaListesiDB:\nemail: " + email + "\nkitap_adi: " + kitap_adi);
     }
 
 
-    private void updateOkunmaDurumu(String email_adresi, String kitapAdi, boolean okunma_durumu) {
+    private void updateOkunmaDurumu(String kitapAdi, boolean okunma_durumu) {
         // burada DB'de kullanıcının email'ine göre volley ile DB'deki okuma listesinde bulunan
         // kitabın okunma_durumu değeri güncellenir
-        Log.e("TAG", "email: " + email_adresi + "\nkitapAdi : " + kitapAdi + "\n" +
+        SharedPreferences sp = mContext.getSharedPreferences("girisBilgileri", Context.MODE_PRIVATE);
+        String email = sp.getString("email_adresi", "");
+        Log.e("TAG", "email: " + email + "\nkitapAdi : " + kitapAdi + "\n" +
                 "Okunma Durumu: " + okunma_durumu);
+
+        if (okunma_durumu){
+
+        }
     }
 
     private void sesCal() {
@@ -179,7 +94,6 @@ public class OkumaListesiAdapter extends RecyclerView.Adapter<OkumaListesiAdapte
     public CardViewTasarimNesneleriniTutucu onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_okuma_listesi_tasarim, parent, false);
 
-
         return new CardViewTasarimNesneleriniTutucu(itemView);
     }
 
@@ -188,6 +102,87 @@ public class OkumaListesiAdapter extends RecyclerView.Adapter<OkumaListesiAdapte
         final Kitap kitap = kitapList.get(position);
         holder.tvKitapAdi.setText(kitap.getKitap_adi());
         holder.tvYazarAdi.setText(kitap.getYazar().getAd() + " " + kitap.getYazar().getSoyad());
+
+        holder.checkOkudum.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) { // işaretlendiyse:
+                    String kitapAdi = holder.tvKitapAdi.getText().toString().trim();
+                    updateOkunmaDurumu(kitapAdi, true);
+                    holder.tvKitapAdi.setPaintFlags(holder.tvKitapAdi.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    holder.tvYazarAdi.setPaintFlags(holder.tvKitapAdi.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+                    holder.cl.setBackgroundColor(mContext.getResources().getColor(R.color.okunmus_eleman));
+                    holder.tvKitapAdi.setTextColor(mContext.getResources().getColor(R.color.white));
+                    holder.tvYazarAdi.setTextColor(mContext.getResources().getColor(R.color.white));
+
+                    sesCal();
+                } else {     // işaret kaldırıldıysa:
+                    String kitapAdi = holder.tvKitapAdi.getText().toString().trim();
+                    updateOkunmaDurumu(kitapAdi, false);
+                    holder.tvKitapAdi.setPaintFlags(holder.tvKitapAdi.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                    holder.tvYazarAdi.setPaintFlags(holder.tvKitapAdi.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+
+                    holder.cl.setBackgroundColor(mContext.getResources().getColor(R.color.cl_bg));
+                    holder.tvKitapAdi.setTextColor(mContext.getResources().getColor(R.color.black));
+                    holder.tvYazarAdi.setTextColor(mContext.getResources().getColor(R.color.okuma_listesi_yazar));
+                }
+            }
+        });
+
+        holder.cl.setOnClickListener(new View.OnClickListener() { // Card Nesnesine dokunulursa:
+            @Override
+            public void onClick(View v) {
+
+                holder.checkOkudum.setChecked(!holder.checkOkudum.isChecked());
+                Toast.makeText(mContext, "CL Tıklandı!", Toast.LENGTH_SHORT).show();
+                if (holder.checkOkudum.isChecked()) { //
+                    String kitapAdi = holder.tvKitapAdi.getText().toString().trim();
+                    updateOkunmaDurumu(kitapAdi, true);
+
+                    holder.tvKitapAdi.setPaintFlags(holder.tvKitapAdi.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    holder.tvYazarAdi.setPaintFlags(holder.tvKitapAdi.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+                    holder.cl.setBackgroundColor(mContext.getResources().getColor(R.color.okunmus_eleman));
+                    holder.tvKitapAdi.setTextColor(mContext.getResources().getColor(R.color.white));
+                    holder.tvYazarAdi.setTextColor(mContext.getResources().getColor(R.color.white));
+
+                    kitapList.remove(holder.getAdapterPosition());
+                    notifyItemRemoved(holder.getAdapterPosition());
+                } else {
+                    holder.tvKitapAdi.setPaintFlags(holder.tvKitapAdi.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                    holder.tvYazarAdi.setPaintFlags(holder.tvYazarAdi.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+
+                    holder.cl.setBackgroundColor(mContext.getResources().getColor(R.color.cl_bg));
+                    holder.tvKitapAdi.setTextColor(mContext.getResources().getColor(R.color.black));
+                    holder.tvYazarAdi.setTextColor(mContext.getResources().getColor(R.color.okuma_listesi_yazar));
+
+                    kitapList.remove(holder.getAdapterPosition());
+                    notifyItemRemoved(holder.getAdapterPosition());
+                }
+
+            }
+        });
+
+
+        holder.cl.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Toast.makeText(mContext, "Siliniyor...", Toast.LENGTH_SHORT).show();
+
+                holder.cl.setBackgroundColor(mContext.getResources().getColor(R.color.silinecek_eleman));
+                holder.tvKitapAdi.setTextColor(mContext.getResources().getColor(R.color.white));
+                holder.tvYazarAdi.setTextColor(mContext.getResources().getColor(R.color.white));
+
+
+                deleteFromOkumaListesiDB(kitapList.get(holder.getAdapterPosition()).getKitap_adi().trim());
+
+                kitapList.remove(holder.getAdapterPosition());
+                notifyItemRemoved(holder.getAdapterPosition());
+
+                return false;
+            }
+        });
     }
 
     @Override

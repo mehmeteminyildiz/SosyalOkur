@@ -48,7 +48,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvYazarAdi" />
+        app:layout_constraintTop_toBottomOf="@+id/tvYazarAd" />
 
     <Button
         android:id="@+id/btnAlintilariGoster"
@@ -68,6 +68,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginEnd="16dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/imgBack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imgBack"
@@ -86,12 +87,12 @@
         app:layout_constraintTop_toBottomOf="@+id/btnAlintilariGoster" />
 
     <TextView
-        android:id="@+id/tvYazarAdi"
+        android:id="@+id/tvYazarAd"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-light"
-        android:gravity="end"
+        android:gravity="center"
         android:text="Gregory Petrov"
         android:textColor="@color/text"
         app:layout_constraintEnd_toEndOf="@+id/tvKitapAdi"

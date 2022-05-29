@@ -35,7 +35,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void tasarimNesneleriniBaslat() {
         tvZatenHesabim = findViewById(R.id.tvZatenHesabim);
         btnRegister = findViewById(R.id.btnRegister);
-        tilEmail = findViewById(R.id.tilEmail);
+        tilEmail = findViewById(R.id.tilDuvarMesaji);
         tilKullaniciAdi = findViewById(R.id.tilKullaniciAdi);
         tilParola = findViewById(R.id.tilParola);
 
@@ -68,6 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 tilEmail.setError(null);
+                tilEmail.setErrorEnabled(false);
             }
 
             @Override
@@ -85,6 +86,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 tilKullaniciAdi.setError(null);
+                tilKullaniciAdi.setErrorEnabled(false);
             }
 
             @Override
@@ -102,6 +104,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 tilParola.setError(null);
+                tilParola.setErrorEnabled(false);
             }
 
             @Override

@@ -29,6 +29,7 @@ import com.mhmtyldz.yldz.sosyalokur.R;
 import com.mhmtyldz.yldz.sosyalokur.Siniflar.Kitap;
 import com.mhmtyldz.yldz.sosyalokur.Siniflar.Yazar;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class FragmentAra extends Fragment {
@@ -38,7 +39,7 @@ public class FragmentAra extends Fragment {
     private Switch mySwitch;
 
     private TextInputLayout tilAramaEkrani;
-    private RecyclerView rv;
+    private RecyclerView rvKitap, rvYazar;
     private EditText tietAramaEkrani;
     private ArrayList<Kitap> kitapArrayList;
     private ArrayList<Yazar> yazarArrayList;
@@ -54,15 +55,19 @@ public class FragmentAra extends Fragment {
         mySwitch = rootView.findViewById(R.id.mySwitch);
         tilAramaEkrani = rootView.findViewById(R.id.tilAramaEkrani);
         tietAramaEkrani = rootView.findViewById(R.id.tietAramaEkrani);
-        rv = rootView.findViewById(R.id.rv);
+        rvYazar = rootView.findViewById(R.id.rvYazar);
+        rvKitap = rootView.findViewById(R.id.rvKitap);
         tvKitap = rootView.findViewById(R.id.tvKitap);
         tvYazar = rootView.findViewById(R.id.tvYazar);
 
 
         tvKitap.setTextColor(getResources().getColor(R.color.black));
 
-        rv.setHasFixedSize(true);
-        rv.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
+        rvKitap.setHasFixedSize(true);
+        rvKitap.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
+
+        rvYazar.setHasFixedSize(true);
+        rvYazar.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().getApplicationContext().INPUT_METHOD_SERVICE);
 
         kitapArrayList = new ArrayList<>();
@@ -157,10 +162,16 @@ public class FragmentAra extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Toast.makeText(getContext(), "is checked: " + isChecked, Toast.LENGTH_SHORT).show();
                 if (isChecked) { // Yazar seçili
+                    //rv.setAdapter(yazarAdapter);
+                    rvYazar.setVisibility(View.VISIBLE);
+                    rvKitap.setVisibility(View.GONE);
                     tvKitap.setTextColor(getResources().getColor(R.color.secili_olmayan_yazi));
                     tvYazar.setTextColor(getResources().getColor(R.color.secili_yazi));
                     secim = true;
                 } else { // Kitap Seçili
+                    //rv.setAdapter(kitapAdapter);
+                    rvYazar.setVisibility(View.GONE);
+                    rvKitap.setVisibility(View.VISIBLE);
                     tvKitap.setTextColor(getResources().getColor(R.color.secili_yazi));
                     tvYazar.setTextColor(getResources().getColor(R.color.secili_olmayan_yazi));
                     secim = false;
@@ -171,29 +182,18 @@ public class FragmentAra extends Fragment {
         kitapAdapter = new AraKitapAdapter(getActivity().getApplicationContext(), kitapArrayList);
         yazarAdapter = new AraYazarAdapter(getActivity().getApplicationContext(), yazarArrayList);
 
-        getPopulerKitaplar();
+        rvKitap.setAdapter(kitapAdapter);
+        rvYazar.setAdapter(yazarAdapter);
+
+        rvYazar.setVisibility(View.GONE);
+
 
         return rootView;
     }
 
-    private void getPopulerKitaplar() {
-        kitapArrayList.clear();
-        // burada DB'den verileri getirmeliyiz.
-        kitapAdapter.notifyDataSetChanged();
-        kitapArrayList = new ArrayList<>();
-
-        Yazar yazar = new Yazar(1, "Yazar Adı", "Soyadı");
-        kitapArrayList.add(new Kitap(1, "Popüler Kitap - 1", yazar));
-        kitapArrayList.add(new Kitap(1, "Popüler Kitap - 2", yazar));
-        kitapArrayList.add(new Kitap(1, "Popüler Kitap - 3", yazar));
-        kitapArrayList.add(new Kitap(1, "Popüler Kitap - 4", yazar));
-
-
-        verileriYerlestirKitap(kitapArrayList);
-
-    }
 
     private void getYazarlarByYazarAdi(String aramaMetni) {
+
         Toast.makeText(getContext(), "Yazar: " + aramaMetni, Toast.LENGTH_SHORT).show();
         if (aramaMetni.equals("")) {
             tilAramaEkrani.setError("Bir yazar adı girmelisin!");
@@ -202,71 +202,77 @@ public class FragmentAra extends Fragment {
             yazarArrayList.clear();
 
 
-            // burada DB'den verileri getirmeliyiz.
-            yazarAdapter.notifyDataSetChanged();
-            yazarArrayList = new ArrayList<>();
+            ArrayList<Yazar> geciciArrayList = new ArrayList<>();
+
+            String YAZAR_RESIM_URL = "url";
 
             if (aramaMetni.equals("a")) {
-                yazarArrayList.add(new Yazar(1, "Jules", "Payot"));
-                yazarArrayList.add(new Yazar(1, "Jules", "Payot"));
-                yazarArrayList.add(new Yazar(1, "Jules", "Payot"));
-                yazarArrayList.add(new Yazar(1, "Jules", "Payot"));
-                yazarArrayList.add(new Yazar(1, "Jules", "Payot"));
+                for (int i = 0; i < 10; i++) {
+                    geciciArrayList.add(new Yazar(i, "Jules", "Payot", YAZAR_RESIM_URL));
+                    geciciArrayList.add(new Yazar(1, "Yazar Adı asdasdasd", "Soyadı", YAZAR_RESIM_URL));
+
+                }
+
             } else {
-
-                yazarArrayList.add(new Yazar(1, "A", "B"));
-                yazarArrayList.add(new Yazar(1, "A", "B"));
-                yazarArrayList.add(new Yazar(1, "A", "B"));
-                yazarArrayList.add(new Yazar(1, "A", "B"));
-                yazarArrayList.add(new Yazar(1, "A", "B"));
+                geciciArrayList.add(new Yazar(1, "Yazar Adı", "Soyadı", YAZAR_RESIM_URL));
+                geciciArrayList.add(new Yazar(1, "Yazar Adı", "Soyadı", YAZAR_RESIM_URL));
+                geciciArrayList.add(new Yazar(1, "Yazar Adı", "Soyadı", YAZAR_RESIM_URL));
+                geciciArrayList.add(new Yazar(1, "Yazar Adı", "Soyadı", YAZAR_RESIM_URL));
+                geciciArrayList.add(new Yazar(1, "Yazar Adı", "Soyadı", YAZAR_RESIM_URL));
             }
+            yazarArrayList.addAll(geciciArrayList);
+            yazarAdapter.notifyDataSetChanged();
 
 
-            verileriYerlestirYazar(yazarArrayList);
+            //verileriYerlestirYazar(yazarArrayList);
 
         }
     }
 
     private void getKitaplarByKitapAdi(String aramaMetni) {
         if (aramaMetni.equals("")) {
-            tilAramaEkrani.setError("Bir yazar adı girmelisin!");
+            tilAramaEkrani.setError("Bir kitap adı girmelisin!");
         } else {
             tietAramaEkrani.setText("");
+
             kitapArrayList.clear();
+            //kitapAdapter.notifyDataSetChanged();
 
             // burada DB'den verileri getirmeliyiz.
+            ArrayList<Kitap> geciciListe = new ArrayList<>();
 
-            kitapAdapter.notifyDataSetChanged();
-            kitapArrayList = new ArrayList<>();
 
             if (aramaMetni.equals("a")) {
-                Yazar yazar = new Yazar(1, "İlber", "Ortaylı");
-                kitapArrayList.add(new Kitap(1, "Nutuk", yazar));
-                kitapArrayList.add(new Kitap(1, "Nutuk", yazar));
-                kitapArrayList.add(new Kitap(1, "Nutuk", yazar));
-                kitapArrayList.add(new Kitap(1, "Nutuk", yazar));
-                kitapArrayList.add(new Kitap(1, "Nutuk", yazar));
+                String YAZAR_RESIM_URL = "url";
+                Yazar yazar = new Yazar(1, "İlber", "Ortaylı", YAZAR_RESIM_URL);
+                geciciListe.add(new Kitap(1, "Nutuk", yazar));
+                geciciListe.add(new Kitap(2, "Nutuk", yazar));
+                geciciListe.add(new Kitap(3, "Nutuk", yazar));
+                geciciListe.add(new Kitap(4, "Nutuk", yazar));
+                geciciListe.add(new Kitap(5, "Nutuk", yazar));
             } else {
-                Yazar yazar = new Yazar(1, "İlber", "Ortaylı");
-                kitapArrayList.add(new Kitap(1, "B", yazar));
-                kitapArrayList.add(new Kitap(1, "B", yazar));
-                kitapArrayList.add(new Kitap(1, "B", yazar));
-                kitapArrayList.add(new Kitap(1, "B", yazar));
-                kitapArrayList.add(new Kitap(1, "B", yazar));
+                String YAZAR_RESIM_URL = "url";
+                Yazar yazar = new Yazar(1, "İlber", "Ortaylı",YAZAR_RESIM_URL );
+                geciciListe.add(new Kitap(1, "Türklerin Tarihi", yazar));
+                geciciListe.add(new Kitap(2, "Türklerin Tarihi", yazar));
+                geciciListe.add(new Kitap(3, "Türklerin Tarihi", yazar));
+                geciciListe.add(new Kitap(4, "Türklerin Tarihi", yazar));
+                geciciListe.add(new Kitap(5, "Türklerin Tarihi", yazar));
             }
+            kitapArrayList.addAll(geciciListe);
 
+            kitapAdapter.notifyDataSetChanged();
 
-            verileriYerlestirKitap(kitapArrayList);
-
+            //kitapAdapter = new AraKitapAdapter(getActivity().getApplicationContext(), kitapArrayList);
+            //rv.setAdapter(kitapAdapter);
+            //verileriYerlestirKitap(kitapArrayList);
         }
     }
 
     private void verileriYerlestirKitap(ArrayList<Kitap> kitapArrayList) {
-        rv.setAdapter(null);
+        //rv.setAdapter(null);
         kitapAdapter = new AraKitapAdapter(getActivity().getApplicationContext(), kitapArrayList);
-
-
-        rv.setAdapter(kitapAdapter);
+        rvKitap.setAdapter(kitapAdapter);
 
         if (kitapArrayList.size() <= 0) {
             Toast.makeText(getContext(), "Bulunamadı", Toast.LENGTH_SHORT).show();
@@ -277,10 +283,10 @@ public class FragmentAra extends Fragment {
     }
 
     private void verileriYerlestirYazar(ArrayList<Yazar> yazarArrayList) {
-        rv.setAdapter(null);
+        rvYazar.setAdapter(null);
 
         yazarAdapter = new AraYazarAdapter(getActivity().getApplicationContext(), yazarArrayList);
-        rv.setAdapter(yazarAdapter);
+        rvYazar.setAdapter(yazarAdapter);
 
         if (yazarArrayList.size() <= 0) {
             Toast.makeText(getContext(), "Bulunamadı", Toast.LENGTH_SHORT).show();

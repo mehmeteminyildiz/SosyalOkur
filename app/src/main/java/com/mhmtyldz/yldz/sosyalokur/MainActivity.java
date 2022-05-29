@@ -1,10 +1,5 @@
 package com.mhmtyldz.yldz.sosyalokur;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,6 +11,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
@@ -25,12 +25,10 @@ import com.mhmtyldz.yldz.sosyalokur.Fragments.FragmentAnasayfa;
 import com.mhmtyldz.yldz.sosyalokur.Fragments.FragmentAra;
 import com.mhmtyldz.yldz.sosyalokur.Fragments.FragmentDuvar;
 import com.mhmtyldz.yldz.sosyalokur.Fragments.FragmentMyProfile;
-import com.mhmtyldz.yldz.sosyalokur.Fragments.FragmentOkumaListesi;
 
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottom_navigation;
-    //private BottomAppBar bottomAppBar;
     private Fragment tempFragment;
     private FloatingActionButton fab;
 
@@ -42,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //bottomAppBar = findViewById(R.id.bottomAppBar);
         fab = findViewById(R.id.fab);
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_tutucu, new FragmentAnasayfa()).commit();
         seciliSayfa = R.id.miAnasayfa;
@@ -62,15 +59,6 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_tutucu, tempFragment).commit();
 
                     return true;
-                } else if (item.getItemId() == R.id.miOkumaListesi && item.getItemId() != bottom_navigation.getSelectedItemId()) {
-                    // fragment okuma listesi seçilir
-                    fab.setVisibility(View.VISIBLE);
-                    seciliSayfa = R.id.miOkumaListesi;
-                    tempFragment = new FragmentOkumaListesi();
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_tutucu, tempFragment).commit();
-
-                    return true;
-
                 } else if (item.getItemId() == R.id.miDuvar && item.getItemId() != bottom_navigation.getSelectedItemId()) {
                     fab.setVisibility(View.GONE);
                     seciliSayfa = R.id.miDuvar;
@@ -91,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_tutucu, tempFragment).commit();
                     return true;
                 }
-
                 return true;
             }
         });
@@ -103,12 +90,12 @@ public class MainActivity extends AppCompatActivity {
                     // alıntı ekle sayfasına git:
                     Toast.makeText(MainActivity.this, "FAB clicked in Ana Sayfa", Toast.LENGTH_SHORT).show();
                     alintiEkleSayfasinaGit();
-                } else if (seciliSayfa == R.id.miOkumaListesi) {
-                    // okuma listesine kitap ekle sayfasına git:
+                } /*else if (seciliSayfa == R.id.miOkumaListesi) {
+                    // okuma listesine kitap ekle diyalogunu aç:
                     Toast.makeText(MainActivity.this, "FAB clicked in Okuma Listesi", Toast.LENGTH_SHORT).show();
                     showKitapEkleDialog();
                     //kitapEkleSayfasinaGit();
-                } else if (seciliSayfa == R.id.miDuvar) {
+                } */else if (seciliSayfa == R.id.miDuvar) {
                     // duvara mesaj ekle:
                     Toast.makeText(MainActivity.this, "FAB clicked in Duvar", Toast.LENGTH_SHORT).show();
                 } else if (seciliSayfa == R.id.miAra) {
@@ -125,61 +112,6 @@ public class MainActivity extends AppCompatActivity {
         String email = sp.getString("email_adresi", "");
         String toastMesaj = "girisYapildiMi: " + girisYapildiMi + "\nEmail: " + email;
         Log.e("TAG", "main act - " + toastMesaj);
-
-//        bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//                if (item.getItemId() == R.id.miAnasayfa && seciliSayfa != R.id.miAnasayfa) {
-//                    //fab.setVisibility(View.VISIBLE);
-//                    seciliSayfa = R.id.miAnasayfa;
-//                    tempFragment = new FragmentAnasayfa();
-//                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_tutucu, tempFragment).commit();
-//
-//                    return true;
-//                } else if (item.getItemId() == R.id.miOkumaListesi && seciliSayfa != R.id.miOkumaListesi) {
-//                    // fragment okuma listesi seçilir
-//                    //fab.setVisibility(View.VISIBLE);
-//                    seciliSayfa = R.id.miOkumaListesi;
-//
-//                    tempFragment = new FragmentOkumaListesi();
-//                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_tutucu, tempFragment).commit();
-//
-//                    return true;
-//
-//                } else if (item.getItemId() == R.id.miDuvar && seciliSayfa != R.id.miDuvar) {
-//                    //fab.setVisibility(View.VISIBLE);
-//                    seciliSayfa = R.id.miDuvar;
-//
-//                    tempFragment = new FragmentDuvar();
-//                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_tutucu, tempFragment).commit();
-//
-//
-//                    return true;
-//
-//                } else if (item.getItemId() == R.id.miAra && seciliSayfa != R.id.miAra) {
-//                    seciliSayfa = R.id.miAra;
-//                    //fab.setVisibility(View.INVISIBLE);
-//
-//                    tempFragment = new FragmentAra();
-//                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_tutucu, tempFragment).commit();
-//                    return true;
-//                } else if (item.getItemId() == R.id.miMyProfile && seciliSayfa != R.id.miMyProfile) {
-//                    seciliSayfa = R.id.miMyProfile;
-//                    //fab.setVisibility(View.INVISIBLE);
-//
-//
-//                    tempFragment = new FragmentMyProfile();
-//                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_tutucu, tempFragment).commit();
-//                    return true;
-//                }
-//                return true;
-//
-//            }
-//
-//        });
-//
-
-
     }
 
     private void showKitapEkleDialog() {

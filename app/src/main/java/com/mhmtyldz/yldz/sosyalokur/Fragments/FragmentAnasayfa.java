@@ -59,7 +59,7 @@ public class FragmentAnasayfa extends Fragment {
     }
 
 
-    private void getAlintilar() { // çok paylaşım olur ve kasma olursa LAZY LOADING araştıralım.
+    private void getAlintilar() {
 
         String url = "https://mehmetemin.xyz/sosyalOkur/getAlintilar.php";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -84,15 +84,14 @@ public class FragmentAnasayfa extends Fragment {
                         String YAZAR_ADI = alintilarjsonObject.getString("YAZAR_ADI");
                         String PIC_NAME = alintilarjsonObject.getString("PIC_NAME");
                         int YAZAR_ID = alintilarjsonObject.getInt("YAZAR_ID");
+                        String YAZAR_RESIM_URL = "URL ADRESI";
 
-
-                        Yazar yazar = new Yazar(YAZAR_ID, YAZAR_ADI, YAZAR_SOYADI);
+                        Yazar yazar = new Yazar(YAZAR_ID, YAZAR_ADI, YAZAR_SOYADI, YAZAR_RESIM_URL);
                         Kitap kitap = new Kitap(KITAP_ID, KITAP_ADI, yazar);
 
                         Alinti alinti = new Alinti(ALINTI_ID, KULLANICI_ID, KULLANICI_ADI, PIC_NAME,
                                 kitap, ALINTI_METNI, ALINTI_BASLIGI, ALINTI_TARIHI);
 
-                        //Log.e("TAG", "Alıntı: " + alinti.getAlinti_resim_ad());
 
                         alintiArrayList.add(alinti);
 

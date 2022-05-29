@@ -5,11 +5,14 @@ public class Yazar {
     private int id;
     private String ad;
     private String soyad;
+    private String resim_url;
 
-    public Yazar(int id, String ad, String soyad) {
+
+    public Yazar(int id, String ad, String soyad, String resim_url) {
         this.id = id;
         this.ad = ad;
         this.soyad = soyad;
+        this.resim_url = resim_url;
     }
 
     public int getId() {
@@ -34,5 +37,13 @@ public class Yazar {
 
     public void setSoyad(String soyad) {
         this.soyad = soyad;
+    }
+
+    public String getResim_url() {
+        return resim_url;
+    }
+
+    public void setResim_url(String resim_url) {
+        this.resim_url = resim_url;
     }
 }

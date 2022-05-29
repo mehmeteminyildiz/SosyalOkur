@@ -33,11 +33,11 @@ import java.util.ArrayList;
 
 public class KitapActivity extends AppCompatActivity {
 
-    private String gelenKitapAdi;
+    private String gelenKitapAdi, gelenYazarAd, gelenYazarSoyad;
     private TextView tvKitapAdi, tvKitapOzeti, tvYazarAdi;
     private ImageButton imgBack;
     private RecyclerView rv;
-    private ImageView imgOkumaListemeEkle;
+    //private ImageView imgOkumaListemeEkle;
     private Button btnAlintilariGoster;
     private boolean okumaListesindeVarMi;
     private AlintiAdapter adapter;
@@ -57,23 +57,71 @@ public class KitapActivity extends AppCompatActivity {
         // gelen kullaniciAdi değerini alalım:
 
 
-        imgOkumaListemeEkle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (okumaListesindeVarMi) {
-                    okumaListesindenSil("email_adresi", gelenKitapAdi);
-                } else {
-                    okumaListesineEkle("email_adresi", gelenKitapAdi);
-                }
+    }
 
-            }
-        });
+
+//    private void okumaListesindeVarMiCheck(String gelenKitapAdi, String yazar_ad, String yazar_soyad) {
+//
+//        // DB'den okuma listesinde olup olmadığını kontrol et.
+//        okumaListesindeVarMi = !okumaListesindeVarMi;
+//        if (okumaListesindeVarMi) {
+//            imgOkumaListemeEkle.setImageResource(R.drawable.icon_book);
+//        } else {
+//            imgOkumaListemeEkle.setImageResource(R.drawable.icon_book_outlined);
+//        }
+//        imgOkumaListemeEkle.setEnabled(true);
+//
+//        getAlintilarByKitapAdi(gelenKitapAdi, yazar_ad, yazar_soyad);
+//
+//
+//    }
+
+//    private void okumaListesineEkle(String email_adresi, String gelenKitapAdi) {
+//        okumaListesindeVarMi = true;
+//        imgOkumaListemeEkle.setImageResource(R.drawable.icon_book);
+//        // email_adresi ve gelenKitapAdi DB'ye gönderilerek kullanıcının okuma listesine kitap eklensin
+//
+//    }
+//
+//    private void okumaListesindenSil(String email_adresi, String gelenKitapAdi) {
+//        okumaListesindeVarMi = false;
+//        imgOkumaListemeEkle.setImageResource(R.drawable.icon_book_outlined);
+//        // email_adresi ve gelenKitapAdi DB'ye gönderilerek kullanıcının okuma listesinden kitap silinsin.
+//    }
+
+    private void tasarimNesneleriniBaslat() {
+        tvKitapAdi = findViewById(R.id.tvKitapAdi);
+        tvKitapOzeti = findViewById(R.id.tvKitapOzeti);
+        tvYazarAdi = findViewById(R.id.tvYazarAd);
+        imgBack = findViewById(R.id.imgBack);
+        //imgOkumaListemeEkle = findViewById(R.id.imgOkumaListemeEkle);
+        btnAlintilariGoster = findViewById(R.id.btnAlintilariGoster);
+        rv = findViewById(R.id.rv);
+
+        //imgOkumaListemeEkle.setEnabled(false);
+
+        setListeners();
+    }
+
+    private void setListeners() {
+//        imgOkumaListemeEkle.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (okumaListesindeVarMi) {
+//                    okumaListesindenSil("email_adresi", gelenKitapAdi);
+//                } else {
+//                    okumaListesineEkle("email_adresi", gelenKitapAdi);
+//                }
+//
+//            }
+//        });
 
         tvYazarAdi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(KitapActivity.this, YazarActivity.class);
-                intent.putExtra("yazar_adi", tvYazarAdi.getText().toString().trim());
+                intent.putExtra("yazar_adi", gelenYazarAd);
+                intent.putExtra("yazar_soyadi",gelenYazarSoyad);
                 startActivity(intent);
             }
         });
@@ -107,48 +155,8 @@ public class KitapActivity extends AppCompatActivity {
             }
         });
 
-
-    }
-
-
-    private void okumaListesindeVarMiCheck(String gelenKitapAdi) {
-
-        // DB'den okuma listesinde olup olmadığını kontrol et.
-        okumaListesindeVarMi = !okumaListesindeVarMi;
-        if (okumaListesindeVarMi) {
-            imgOkumaListemeEkle.setImageResource(R.drawable.icon_book);
-        } else {
-            imgOkumaListemeEkle.setImageResource(R.drawable.icon_book_outlined);
-        }
-        imgOkumaListemeEkle.setEnabled(true);
-        getKitapBilgileriByKitapAdi(gelenKitapAdi);
-
-
-    }
-
-    private void okumaListesineEkle(String email_adresi, String gelenKitapAdi) {
-        okumaListesindeVarMi = true;
-        imgOkumaListemeEkle.setImageResource(R.drawable.icon_book);
-    }
-
-    private void okumaListesindenSil(String email_adresi, String gelenKitapAdi) {
-        okumaListesindeVarMi = false;
-        imgOkumaListemeEkle.setImageResource(R.drawable.icon_book_outlined);
-
-    }
-
-    private void tasarimNesneleriniBaslat() {
-        tvKitapAdi = findViewById(R.id.tvKitapAdi);
-        tvKitapOzeti = findViewById(R.id.tvKitapOzeti);
-        tvYazarAdi = findViewById(R.id.tvYazarAdi);
-        imgBack = findViewById(R.id.imgBack);
-        imgOkumaListemeEkle = findViewById(R.id.imgOkumaListemeEkle);
-        btnAlintilariGoster = findViewById(R.id.btnAlintilariGoster);
-        rv = findViewById(R.id.rv);
-
-        imgOkumaListemeEkle.setEnabled(false);
-
         setUpRv();
+
     }
 
     private void setUpRv() {
@@ -159,32 +167,40 @@ public class KitapActivity extends AppCompatActivity {
         dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.divider_recyclerview));
         rv.addItemDecoration(dividerItemDecoration);
 
-        kitapAdiniYerlestir();
-
+        gelenBilgileriAl();
     }
 
-    private void kitapAdiniYerlestir() {
+    private void gelenBilgileriAl() {
+        // Intent ile gelen bilgileri alalım
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         gelenKitapAdi = bundle.getString("kitap_adi");
+        gelenYazarAd = bundle.getString("yazar_ad");
+        gelenYazarSoyad = bundle.getString("yazar_soyad");
+        //Log.e("TAG", "kitapAdiniYerlestir: " + gelenYazarAd + " -- " + gelenYazarSoyad);
         tvKitapAdi.setText(gelenKitapAdi);
-        okumaListesindeVarMiCheck(gelenKitapAdi);
-
+        tvYazarAdi.setText(gelenYazarAd + " " + gelenYazarSoyad);
+        getKitapBilgileriByKitapAdi(gelenKitapAdi, gelenYazarAd, gelenYazarSoyad);
     }
 
-    private void getKitapBilgileriByKitapAdi(String gelenKitapAdi) {
-        // kitap özeti, yazar adı soyadı bilgilerini alalım.
-        String kitap_ozeti = "Kitap özet metni burada yer alır. Örneğin:\nİrade Terbiyesi, tüm zamanların en çok farklı dile çevrilen kitapları arasındadır. Yazıldığı dönemde hayli ses getirmiş ve kısa sürede baskı üstüne baskı yapmıştır. Cemil Meriç; “Disiplin içinde çalışmayı bu kitaptan öğrendim” der onun için. Ali Fuat Başgil ise şu sözleriyle onun değerini pekiştirir: “Mösyö Girard bize bir kitap tavsiye etti ve mutlaka okumamızı söyledi. Bu, Aix-Marseille Üniversitesi rektörü Jules Payot’un İrade Terbiyesi adlı kitabıydı. Ertesi gün şehre inerek kitabı aldım, ihtiyar bir meşenin dibine oturarak okumaya koyuldum. Okudukça, içimde özlem ve pişmanlıkla karışık, belli belirsiz bir acı duymaya başladım. Kendi kendime, ah bu kitap on sekiz, yirmi yaşlarımdayken elime geçmeliydi, böyle bir kitabı okumakta geciktiğim için üzülüyordum.” Fransızca aslından yapılan elinizdeki bu özgün ve titiz çevirisiyle İrade Terbiyesi, böylece Türk okurunun hak ettiği niteliğe kavuşmuş oluyor.";
-        String yazar_adi = "Yazar Adı";
+
+    private void getKitapBilgileriByKitapAdi(String gelenKitapAdi, String yazar_ad, String yazar_soyad) {
+        // kitap özeti, yazar adı soyadı bilgilerini alalım DB'den (gelenKitapAdi ve yazar_ad ve yazar_soyad'ına göre).
+        String kitap_ozeti = "Kitap özet metni burada yer alır. Örneğin:\nİrade Terbiyesi, tüm zamanların en çok " +
+                "farklı dile çevrilen kitapları arasındadır. Yazıldığı dönemde hayli ses getirmiş ve kısa sürede baskı " +
+                "üstüne baskı yapmıştır. Cemil Meriç; “Disiplin içinde çalışmayı bu kitaptan öğrendim” der onun için. " +
+                "Ali Fuat Başgil ise şu sözleriyle onun değerini pekiştirir: “Mösyö Girard bize bir kitap tavsiye etti ve " +
+                "mutlaka okumamızı söyledi.";
 
         tvKitapOzeti.setText(kitap_ozeti.trim());
-        tvYazarAdi.setText(yazar_adi);
+        getAlintilarByKitapAdi(gelenKitapAdi, yazar_ad, yazar_soyad);
+        //okumaListesindeVarMiCheck(gelenKitapAdi, yazar_ad, yazar_soyad);
 
-        getAlintilarByKitapAdi(gelenKitapAdi);
 
     }
 
-    private void getAlintilarByKitapAdi(String gelenKitapAdi) {
+    private void getAlintilarByKitapAdi(String gelenKitapAdi, String yazar_ad, String yazar_soyad) {
+        // gelenKitapAdi, yazar_ad, yazar_soyad değerlerini MAPS.PUT() ile gönderilsin. Metodu düzenleyelim
 
         String url = "https://mehmetemin.xyz/sosyalOkur/getAlintilar.php";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -209,15 +225,17 @@ public class KitapActivity extends AppCompatActivity {
                         String YAZAR_ADI = alintilarjsonObject.getString("YAZAR_ADI");
                         String PIC_NAME = alintilarjsonObject.getString("PIC_NAME");
                         int YAZAR_ID = alintilarjsonObject.getInt("YAZAR_ID");
+                        String YAZAR_RESIM_URL = "URL ADRESI";
 
 
-                        Yazar yazar = new Yazar(YAZAR_ID, YAZAR_ADI, YAZAR_SOYADI);
+
+                        Yazar yazar = new Yazar(YAZAR_ID, YAZAR_ADI, YAZAR_SOYADI, YAZAR_RESIM_URL);
                         Kitap kitap = new Kitap(KITAP_ID, KITAP_ADI, yazar);
 
                         Alinti alinti = new Alinti(ALINTI_ID, KULLANICI_ID, KULLANICI_ADI, PIC_NAME,
                                 kitap, ALINTI_METNI, ALINTI_BASLIGI, ALINTI_TARIHI);
 
-                        Log.e("TAG", "Alıntı: " + alinti.getAlinti_resim_ad());
+                        //Log.e("TAG", "Alıntı: " + alinti.getAlinti_resim_ad());
 
                         alintiArrayList.add(alinti);
 
@@ -225,14 +243,12 @@ public class KitapActivity extends AppCompatActivity {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-
                 }
                 verileriYerlestir(alintiArrayList);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
 
             }
         });
@@ -242,14 +258,8 @@ public class KitapActivity extends AppCompatActivity {
     }
 
     private void verileriYerlestir(ArrayList<Alinti> alintiArrayList) {
-        ////Log.e("TAG", "verileriYerlestir: " + paylasimArrayList);
         rv.setAdapter(null);
-        // Collections.reverse(paylasimArrayList); bu şekilde yeniye doğru sıralamak yanlış bence.
-        // Onun yerine MySQL'den çekerken order by kullanmalıyız.
         adapter = new AlintiAdapter(getApplicationContext(), alintiArrayList);
         rv.setAdapter(adapter);
-        //progressBar.setVisibility(View.INVISIBLE);
-
-
     }
 }

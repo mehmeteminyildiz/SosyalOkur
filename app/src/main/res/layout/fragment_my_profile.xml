@@ -83,36 +83,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/imgPp" />
 
             <TextView
-                android:id="@+id/tvOkumaListesiSayisi"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:fontFamily="sans-serif-light"
-                android:gravity="center"
-                android:text="Okuma listesinde 19 kitap var"
-                android:textColor="@color/text"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvAlintiSayisi" />
-
-            <TextView
-                android:id="@+id/tvOkuduguSayisi"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:fontFamily="sans-serif-light"
-                android:gravity="center"
-                android:text="Bugüne kadar 56 kitap okudu"
-                android:textColor="@color/text"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvOkumaListesiSayisi" />
-
-            <TextView
                 android:id="@+id/tvAlintiSayisi"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

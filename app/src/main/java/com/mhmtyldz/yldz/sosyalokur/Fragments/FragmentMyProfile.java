@@ -1,5 +1,8 @@
 package com.mhmtyldz.yldz.sosyalokur.Fragments;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -24,7 +27,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.mhmtyldz.yldz.sosyalokur.Activities.LoginActivity;
+import com.mhmtyldz.yldz.sosyalokur.Activities.RegisterActivity;
 import com.mhmtyldz.yldz.sosyalokur.Adapters.AlintiAdapter;
+import com.mhmtyldz.yldz.sosyalokur.MainActivity;
 import com.mhmtyldz.yldz.sosyalokur.R;
 import com.mhmtyldz.yldz.sosyalokur.Siniflar.Alinti;
 import com.mhmtyldz.yldz.sosyalokur.Siniflar.Kitap;
@@ -43,10 +49,9 @@ public class FragmentMyProfile extends Fragment {
     private AlintiAdapter adapter;
     private Button btnAlintilariGoster;
     private CardView cardView;
-    private TextView tvAlintiSayisi, tvOkumaListesiSayisi, tvOkuduguSayisi;
+    private TextView tvAlintiSayisi;
     private TextView textViewProfilKullaniciAdi;
     private ImageView imgLogout, imgPp;
-
 
     @Nullable
     @Override
@@ -55,19 +60,62 @@ public class FragmentMyProfile extends Fragment {
 
         tasarimNesneleriniBaslat(rootView);
 
+
+        return rootView;
+    }
+
+    private void getKullaniciProfili() {
+        SharedPreferences sp = getActivity().getSharedPreferences("girisBilgileri", Context.MODE_PRIVATE);
+        String email = sp.getString("email_adresi", "");
+        Log.e("TAG", "getKullaniciProfili - email == " + email);
+
+        // burada email gönderilerek : DB'den kullanıcı bilgileri getirilir. ve arayüze yansıtılır
+        String imageName = "alien2";
+        String kullanici_adi = "mehmetemin_yildiz";
+        int alinti_sayisi = 15;
+        //int okuma_listesi_sayisi = 59;
+        //int okudugu_kitap_sayisi = 5;
+
+        String alinti_yazisi = "Toplam <b>" + alinti_sayisi + "</b>" + " alıntı paylaştı";
+        //String okuma_listesi_yazisi = "Okuma listesinde <b>" + okuma_listesi_sayisi + "</b>" + " kitap var";
+        //String okudugu_kitap_sayisi_yazisi = "Bugüne kadar <b>" + okudugu_kitap_sayisi + "</b>" + " kitap okudu";
+
+        tvAlintiSayisi.setText(Html.fromHtml(alinti_yazisi));
+        //tvOkumaListesiSayisi.setText(Html.fromHtml(okuma_listesi_yazisi));
+        //tvOkuduguSayisi.setText(Html.fromHtml(okudugu_kitap_sayisi_yazisi));
+        imgPp.setImageResource(getActivity().getResources()
+                .getIdentifier(imageName, "drawable", getActivity().getPackageName()));
+
+
+        getAlintilar(email);
+
+    }
+
+    private void tasarimNesneleriniBaslat(View rootView) {
+        rv = rootView.findViewById(R.id.rv);
+        btnAlintilariGoster = rootView.findViewById(R.id.btnAlintilariGoster);
+        cardView = rootView.findViewById(R.id.cardView);
+        tvAlintiSayisi = rootView.findViewById(R.id.tvAlintiSayisi);
+        //tvOkumaListesiSayisi = rootView.findViewById(R.id.tvOkumaListesiSayisi);
+        //tvOkuduguSayisi = rootView.findViewById(R.id.tvOkuduguSayisi);
+        imgLogout = rootView.findViewById(R.id.imgLogout);
+        imgPp = rootView.findViewById(R.id.imgPp);
+        textViewProfilKullaniciAdi = rootView.findViewById(R.id.textViewProfilKullaniciAdi);
+
+        setListeners(rootView);
+
+    }
+
+    private void setListeners(View rootView) {
         btnAlintilariGoster.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (rv.getVisibility() == View.VISIBLE) {
                     btnAlintilariGoster.setText("Alıntıları Göster");
-
                     rv.setVisibility(View.GONE);
                     cardView.setVisibility(View.VISIBLE);
-
                 } else if (rv.getVisibility() == View.GONE) {
                     btnAlintilariGoster.setText("Alıntıları Gizle");
-
-
                     rv.setVisibility(View.VISIBLE);
                     cardView.setVisibility(View.GONE);
                 }
@@ -78,45 +126,17 @@ public class FragmentMyProfile extends Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(), "Çıkış yapılıyor...", Toast.LENGTH_SHORT).show();
+                SharedPreferences sp = getContext().getSharedPreferences("girisBilgileri", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putBoolean("girisYapildiMi", false);
+                editor.putString("email_adresi", "");
+                editor.commit();
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+
             }
         });
-
-        return rootView;
-    }
-
-    private void getKullaniciProfili() {
-        // burada DB'den kullanıcı bilgileri getirilir. ve arayüze yansıtılır
-        String imageName = "alien2";
-        String kullanici_adi = "mehmetemin_yildiz";
-        int alinti_sayisi = 15;
-        int okuma_listesi_sayisi = 59;
-        int okudugu_kitap_sayisi = 5;
-
-        String alinti_yazisi = "<b>" + alinti_sayisi + "</b>" + " alıntı paylaştı";
-        String okuma_listesi_yazisi = "Okuma listesinde <b>" + okuma_listesi_sayisi + "</b>" + " kitap var";
-        String okudugu_kitap_sayisi_yazisi = "Bugüne kadar <b>" + okudugu_kitap_sayisi + "</b>" + " kitap okudu";
-
-        tvAlintiSayisi.setText(Html.fromHtml(alinti_yazisi));
-        tvOkumaListesiSayisi.setText(Html.fromHtml(okuma_listesi_yazisi));
-        tvOkuduguSayisi.setText(Html.fromHtml(okudugu_kitap_sayisi_yazisi));
-        imgPp.setImageResource(getActivity().getResources()
-                .getIdentifier(imageName, "drawable", getActivity().getPackageName()));
-
-
-        getAlintilar();
-
-    }
-
-    private void tasarimNesneleriniBaslat(View rootView) {
-        rv = rootView.findViewById(R.id.rv);
-        btnAlintilariGoster = rootView.findViewById(R.id.btnAlintilariGoster);
-        cardView = rootView.findViewById(R.id.cardView);
-        tvAlintiSayisi = rootView.findViewById(R.id.tvAlintiSayisi);
-        tvOkumaListesiSayisi = rootView.findViewById(R.id.tvOkumaListesiSayisi);
-        tvOkuduguSayisi = rootView.findViewById(R.id.tvOkuduguSayisi);
-        imgLogout = rootView.findViewById(R.id.imgLogout);
-        imgPp = rootView.findViewById(R.id.imgPp);
-        textViewProfilKullaniciAdi = rootView.findViewById(R.id.textViewProfilKullaniciAdi);
 
         setUpRv();
 
@@ -134,7 +154,8 @@ public class FragmentMyProfile extends Fragment {
 
     }
 
-    private void getAlintilar() {
+    private void getAlintilar(String email) {
+        // email'e göre kişinin yaptığı alıntılar getirilsin.
 
         alintiArrayList = new ArrayList<>();
 
@@ -161,9 +182,9 @@ public class FragmentMyProfile extends Fragment {
                         String YAZAR_ADI = alintilarjsonObject.getString("YAZAR_ADI");
                         String PIC_NAME = alintilarjsonObject.getString("PIC_NAME");
                         int YAZAR_ID = alintilarjsonObject.getInt("YAZAR_ID");
+                        String YAZAR_RESIM_URL = alintilarjsonObject.getString("YAZAR_RESIM_URL");
 
-
-                        Yazar yazar = new Yazar(YAZAR_ID, YAZAR_ADI, YAZAR_SOYADI);
+                        Yazar yazar = new Yazar(YAZAR_ID, YAZAR_ADI, YAZAR_SOYADI,YAZAR_RESIM_URL);
                         Kitap kitap = new Kitap(KITAP_ID, KITAP_ADI, yazar);
 
                         Alinti alinti = new Alinti(ALINTI_ID, KULLANICI_ID, KULLANICI_ADI, PIC_NAME,

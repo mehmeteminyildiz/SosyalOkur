@@ -34,7 +34,6 @@ public class LoginActivity extends AppCompatActivity {
 
         tasarimNesneleriniBaslat();
         girisKontrol();
-
     }
 
     private void girisKontrol() {
@@ -47,12 +46,11 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
-
         }
     }
 
     private void tasarimNesneleriniBaslat() {
-        tilEmail = findViewById(R.id.tilEmail);
+        tilEmail = findViewById(R.id.tilDuvarMesaji);
         tilParola = findViewById(R.id.tilParola);
         tvParolamiUnuttum = findViewById(R.id.tvParolamiUnuttum);
         btnGiris = findViewById(R.id.btnGiris);
@@ -93,6 +91,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 tilEmail.setError(null);
+                tilEmail.setErrorEnabled(false);
             }
 
             @Override
@@ -110,6 +109,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 tilParola.setError(null);
+                tilParola.setErrorEnabled(false);
             }
 
             @Override
@@ -145,6 +145,7 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         } else { // Yanlış ise:
             Toast.makeText(LoginActivity.this, "Email veya Parola Hatalı", Toast.LENGTH_SHORT).show();
+            
         }
     }
 }

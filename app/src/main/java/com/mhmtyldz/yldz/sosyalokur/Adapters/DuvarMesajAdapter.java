@@ -36,44 +36,26 @@ public class DuvarMesajAdapter extends RecyclerView.Adapter<DuvarMesajAdapter.Ca
     public class CardViewTasarimNesneleriniTutucu extends RecyclerView.ViewHolder {
         // cardView nesnelerini Adapter'a burası sayesinde bağlıyoruz...
         public ConstraintLayout cl;
-        public ImageView imgDuvarProfilResmi;
+        //public ImageView imgDuvarProfilResmi;
         public TextView tvKullaniciAdi, tvMesaj, tvTarih;
 
 
         public CardViewTasarimNesneleriniTutucu(View itemView) {
             super(itemView);
-            imgDuvarProfilResmi = itemView.findViewById(R.id.imgDuvarProfilResmi);
+           // imgDuvarProfilResmi = itemView.findViewById(R.id.imgDuvarProfilResmi);
             cl = itemView.findViewById(R.id.cl);
 
             tvKullaniciAdi = itemView.findViewById(R.id.tvKullaniciAdi);
             tvMesaj = itemView.findViewById(R.id.tvMesaj);
             tvTarih = itemView.findViewById(R.id.tvTarih);
 
-            imgDuvarProfilResmi.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String kullanici_adi = tvKullaniciAdi.getText().toString().trim();
-                    kullaniciProfilineGit(kullanici_adi);
 
 
-                }
-            });
 
-            tvKullaniciAdi.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String kullanici_adi = tvKullaniciAdi.getText().toString().trim();
-                    kullaniciProfilineGit(kullanici_adi);
-                }
-            });
         }
     }
 
-    private void kullaniciProfilineGit(String kullanici_adi) {
-        Intent intent = new Intent(mContext, ProfileActivity.class);
-        intent.putExtra("kullanici_adi", kullanici_adi);
-        mContext.startActivity(intent);
-    }
+
 
 
     @NonNull
@@ -91,8 +73,33 @@ public class DuvarMesajAdapter extends RecyclerView.Adapter<DuvarMesajAdapter.Ca
         holder.tvKullaniciAdi.setText(duvar.getKullaniciAdi());
         holder.tvMesaj.setText(duvar.getMesaj());
         holder.tvTarih.setText(duvar.getTarih());
-        holder.imgDuvarProfilResmi.setImageResource(mContext.getResources()
-                .getIdentifier(duvar.getResimAd(), "drawable", mContext.getPackageName()));
+        //holder.imgDuvarProfilResmi.setImageResource(mContext.getResources()
+        //        .getIdentifier(duvar.getResimAd(), "drawable", mContext.getPackageName()));
+
+
+        holder.tvKullaniciAdi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String kullanici_adi = holder.tvKullaniciAdi.getText().toString().trim();
+                kullaniciProfilineGit(kullanici_adi);
+            }
+        });
+
+        /*holder.imgDuvarProfilResmi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String kullanici_adi = holder.tvKullaniciAdi.getText().toString().trim();
+                kullaniciProfilineGit(kullanici_adi);
+
+
+            }
+        });*/
+    }
+
+    private void kullaniciProfilineGit(String kullanici_adi) {
+        Intent intent = new Intent(mContext, ProfileActivity.class);
+        intent.putExtra("kullanici_adi", kullanici_adi);
+        mContext.startActivity(intent);
     }
 
     @Override

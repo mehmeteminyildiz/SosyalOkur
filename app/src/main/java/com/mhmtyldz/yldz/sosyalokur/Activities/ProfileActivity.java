@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -39,7 +40,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView tvKullaniciAdi;
     private CardView cardView;
     private ImageView imgPp;
-    private TextView tvOkumaListesiSayisi, tvAlintiSayisi, tvOkuduguSayisi;
+    private TextView tvAlintiSayisi;
     private Button btnAlintilariGoster;
     private RecyclerView rv;
 
@@ -56,32 +57,6 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         tasarimNesneleriniBaslat();
-
-        btnAlintilariGoster.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (rv.getVisibility() == View.VISIBLE) {
-                    btnAlintilariGoster.setText("Alıntıları Göster");
-
-                    rv.setVisibility(View.GONE);
-                    cardView.setVisibility(View.VISIBLE);
-
-                } else if (rv.getVisibility() == View.GONE) {
-                    btnAlintilariGoster.setText("Alıntıları Gizle");
-
-
-                    rv.setVisibility(View.VISIBLE);
-                    cardView.setVisibility(View.GONE);
-                }
-            }
-        });
-
-        imgBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
 
 
     }
@@ -104,25 +79,26 @@ public class ProfileActivity extends AppCompatActivity {
         String imageName = "alien2";
         String kullanici_adi = "mehmetemin_yildiz";
         int alinti_sayisi = 15;
-        int okuma_listesi_sayisi = 31;
-        int okudugu_kitap_sayisi = 5;
+        //int okuma_listesi_sayisi = 31;
+        //int okudugu_kitap_sayisi = 5;
 
-        String alinti_yazisi = "<b>" + alinti_sayisi + "</b>" + " alıntı paylaştı";
-        String okuma_listesi_yazisi = "Okuma listesinde <b>" + okuma_listesi_sayisi + "</b>" + " kitap var";
-        String okudugu_kitap_sayisi_yazisi = "Bugüne kadar <b>" + okudugu_kitap_sayisi + "</b>" + " kitap okudu";
+        String alinti_yazisi = "Toplam <b>" + alinti_sayisi + "</b>" + " alıntı paylaştı";
+        //String okuma_listesi_yazisi = "Okuma listesinde <b>" + okuma_listesi_sayisi + "</b>" + " kitap var";
+        //String okudugu_kitap_sayisi_yazisi = "Bugüne kadar <b>" + okudugu_kitap_sayisi + "</b>" + " kitap okudu";
 
         tvAlintiSayisi.setText(Html.fromHtml(alinti_yazisi));
-        tvOkumaListesiSayisi.setText(Html.fromHtml(okuma_listesi_yazisi));
-        tvOkuduguSayisi.setText(Html.fromHtml(okudugu_kitap_sayisi_yazisi));
+        //tvOkumaListesiSayisi.setText(Html.fromHtml(okuma_listesi_yazisi));
+        //tvOkuduguSayisi.setText(Html.fromHtml(okudugu_kitap_sayisi_yazisi));
         imgPp.setImageResource(getResources()
                 .getIdentifier(imageName, "drawable", getPackageName()));
-
 
         getAlintilar();
 
     }
 
     private void getAlintilar() {
+        // Kullanıcının paylaştığı alıntılar burada DB'den getirilecek.
+        Log.e("TAG", "getAlintilar by " + gelenKullaniciAdi);
 
         alintiArrayList = new ArrayList<>();
 
@@ -149,9 +125,11 @@ public class ProfileActivity extends AppCompatActivity {
                         String YAZAR_ADI = alintilarjsonObject.getString("YAZAR_ADI");
                         String PIC_NAME = alintilarjsonObject.getString("PIC_NAME");
                         int YAZAR_ID = alintilarjsonObject.getInt("YAZAR_ID");
+                        String YAZAR_RESIM_URL = "URL ADRESI";
 
 
-                        Yazar yazar = new Yazar(YAZAR_ID, YAZAR_ADI, YAZAR_SOYADI);
+
+                        Yazar yazar = new Yazar(YAZAR_ID, YAZAR_ADI, YAZAR_SOYADI, YAZAR_RESIM_URL);
                         Kitap kitap = new Kitap(KITAP_ID, KITAP_ADI, yazar);
 
                         Alinti alinti = new Alinti(ALINTI_ID, KULLANICI_ID, KULLANICI_ADI, PIC_NAME,
@@ -198,14 +176,43 @@ public class ProfileActivity extends AppCompatActivity {
         btnAlintilariGoster = findViewById(R.id.btnAlintilariGoster);
         cardView = findViewById(R.id.cardView);
         tvAlintiSayisi = findViewById(R.id.tvAlintiSayisi);
-        tvOkumaListesiSayisi = findViewById(R.id.tvOkumaListesiSayisi);
-        tvOkuduguSayisi = findViewById(R.id.tvOkuduguSayisi);
+        //tvOkumaListesiSayisi = findViewById(R.id.tvOkumaListesiSayisi);
+        //tvOkuduguSayisi = findViewById(R.id.tvOkuduguSayisi);
         imgPp = findViewById(R.id.imgPp);
         imgBack = findViewById(R.id.imgBack);
 
+        setListeners();
+
+
+    }
+
+    private void setListeners() {
+        btnAlintilariGoster.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (rv.getVisibility() == View.VISIBLE) {
+                    btnAlintilariGoster.setText("Alıntıları Göster");
+
+                    rv.setVisibility(View.GONE);
+                    cardView.setVisibility(View.VISIBLE);
+
+                } else if (rv.getVisibility() == View.GONE) {
+                    btnAlintilariGoster.setText("Alıntıları Gizle");
+
+
+                    rv.setVisibility(View.VISIBLE);
+                    cardView.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         setUpRv();
-
-
     }
 
     private void setUpRv() {

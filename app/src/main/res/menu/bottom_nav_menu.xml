@@ -8,11 +8,11 @@
         android:icon="@drawable/icon_home"
         android:title=""
         app:showAsAction="always" />
-    <item
-        android:id="@+id/miOkumaListesi"
-        android:icon="@drawable/icon_book"
-        android:title=""
-        app:showAsAction="always" />
+<!--    <item-->
+<!--        android:id="@+id/miOkumaListesi"-->
+<!--        android:icon="@drawable/icon_book"-->
+<!--        android:title=""-->
+<!--        app:showAsAction="always" />-->
     <item
         android:id="@+id/miDuvar"
         android:icon="@drawable/message_selector"

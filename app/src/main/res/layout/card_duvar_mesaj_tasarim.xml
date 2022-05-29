@@ -8,49 +8,45 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="2dp"
+        android:elevation="5dp"
+        app:cardCornerRadius="30dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imgDuvarProfilResmi"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/alien1"
-                android:visibility="visible"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <TextView
                 android:id="@+id/tvKullaniciAdi"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
+                android:fontFamily="sans-serif-medium"
                 android:text="mhmtyldz"
                 android:textColor="#000000"
                 android:textSize="16sp"
-                android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/tvTarih"
-                app:layout_constraintStart_toEndOf="@+id/imgDuvarProfilResmi"
-                app:layout_constraintTop_toTopOf="@+id/imgDuvarProfilResmi" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvMesaj"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="8dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="10dp"
                 android:text="Merhaba bence uygulama çok güzel olmuş. Uzun zamandır bu kadar zevk aldığım ve bilgi edindiğim bir uygulama olmamıştı."
                 android:textColor="#404040"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/tvTarih"
-                app:layout_constraintStart_toStartOf="@+id/imgDuvarProfilResmi"
+                app:layout_constraintStart_toStartOf="@+id/tvKullaniciAdi"
                 app:layout_constraintTop_toBottomOf="@+id/tvKullaniciAdi" />
 
             <TextView

@@ -28,7 +28,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     private void tasarimNesneleriniBaslat() {
         btnResetPassword = findViewById(R.id.btnResetPassword);
-        tilEmail = findViewById(R.id.tilEmail);
+        tilEmail = findViewById(R.id.tilDuvarMesaji);
         setListeners();
 
     }
@@ -49,6 +49,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 tilEmail.setError(null);
+                tilEmail.setErrorEnabled(false);
             }
 
             @Override
@@ -68,7 +69,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             return;
         } else {
             // DB'deki email adresine kullanıcının parolası gönderilir veya sıfırlama bağlantısı gönderilir...
-            Toast.makeText(ForgotPasswordActivity.this, "Mail kutunu kontrol et", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ForgotPasswordActivity.this, "Mail kutunuzu kontrol edin", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
