@@ -1,25 +1,40 @@
 package com.mhmtyldz.yldz.sosyalokur.Activities;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.mhmtyldz.yldz.sosyalokur.MainActivity;
 import com.mhmtyldz.yldz.sosyalokur.R;
+import com.mhmtyldz.yldz.sosyalokur.Siniflar.Alinti;
+import com.mhmtyldz.yldz.sosyalokur.Siniflar.Kitap;
+import com.mhmtyldz.yldz.sosyalokur.Siniflar.Yazar;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class AlintiEkleActivity extends AppCompatActivity {
@@ -35,19 +50,70 @@ public class AlintiEkleActivity extends AppCompatActivity {
         tasarimNesneleriniBaslat();
     }
 
-    private void alintiEkleDB(String kitapAdi, String yazarAdi, String baslik, String alinti_metni) {
+
+
+    private void insertAlinti(String kitapAdi, String yazarAdi, String baslik, String alinti_metni) {
+
         SharedPreferences sp = getSharedPreferences("girisBilgileri", MODE_PRIVATE);
-        String email = sp.getString("email_adresi", "");
-        Log.e("TAG", "alıntıEkle email: " + email);
-        // insert_alinti.php çalıştırılır.
-        // php'ye şunlar gönderilir:
-        // EMAIL    KITAP_ADI   YAZAR_ADI   BASLIK  ALINTI_METNI
-        // alıntı eklendikten sonra Success mesajı alındıysa:
-        Toast.makeText(this, "Alıntı Başarıyla Paylaşıldı!", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(AlintiEkleActivity.this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        // bu flag; tüm activity'leri sonlandırır ve MainActivity'yi sanki uygulama yeniden açılıyormuş gibi açar.
-        startActivity(intent);
+        String email = sp.getString("email_adresi", ""); // email DB'ye gönderilecek
+
+        String url = "https://mehmetemin.xyz/sosyalOkur/insertAlinti.php";
+        StringRequest postStringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    Log.e("TAG", "onResponse: " + response );
+
+                    String yanit = jsonObject.getString("success");
+                    if (yanit.equals("1")){
+                        // alıntı başarılı olarak eklendiyse:
+                        Toast.makeText(AlintiEkleActivity.this, "Alıntı Başarıyla Paylaşıldı!", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(AlintiEkleActivity.this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        // bu flag; tüm activity'leri sonlandırır ve MainActivity'yi sanki uygulama yeniden açılıyormuş gibi açar.
+                        startActivity(intent);
+                    }else if(jsonObject.getString("message")
+                            .equalsIgnoreCase("Kitap not found")){
+                        Toast.makeText(AlintiEkleActivity.this, "Kitap bulunamadı", Toast.LENGTH_SHORT).show();
+                    }else if(jsonObject.getString("message")
+                            .equalsIgnoreCase("Yazar not found")){
+                        Toast.makeText(AlintiEkleActivity.this, "Yazar bulunamadı", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                    
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("email", email);
+                params.put("kitap_adi", kitapAdi);
+                params.put("yazar_adi", yazarAdi);
+                params.put("baslik", baslik);
+                params.put("alinti_metni", alinti_metni);
+
+
+                return params;
+            }
+        };
+        Volley.newRequestQueue(AlintiEkleActivity.this).add(postStringRequest);
+
+
     }
 
     private void tasarimNesneleriniBaslat() {
@@ -71,7 +137,8 @@ public class AlintiEkleActivity extends AppCompatActivity {
                 String alinti_metni = tilAlintiMetin.getEditText().getText().toString().trim();
 
                 if (veriKontrol(kitapAdi, yazarAdi, baslik, alinti_metni)) {
-                    alintiEkleDB(kitapAdi, yazarAdi, baslik, alinti_metni);
+                    insertAlinti(kitapAdi, yazarAdi, baslik, alinti_metni);
+                    //alintiEkleDB(kitapAdi, yazarAdi, baslik, alinti_metni);
                 }
 
 

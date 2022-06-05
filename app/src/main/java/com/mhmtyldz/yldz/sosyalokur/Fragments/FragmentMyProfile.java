@@ -22,12 +22,14 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.mhmtyldz.yldz.sosyalokur.Activities.LoginActivity;
+import com.mhmtyldz.yldz.sosyalokur.Activities.ProfileActivity;
 import com.mhmtyldz.yldz.sosyalokur.Activities.RegisterActivity;
 import com.mhmtyldz.yldz.sosyalokur.Adapters.AlintiAdapter;
 import com.mhmtyldz.yldz.sosyalokur.MainActivity;
@@ -41,6 +43,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FragmentMyProfile extends Fragment {
 
@@ -63,6 +67,100 @@ public class FragmentMyProfile extends Fragment {
 
         return rootView;
     }
+
+
+    private void getForProfile() {
+        alintiArrayList = new ArrayList<>();
+
+        SharedPreferences sp = getActivity().getSharedPreferences("girisBilgileri", Context.MODE_PRIVATE);
+        String email = sp.getString("email_adresi", ""); // email DB'ye gönderilecek
+
+        String kullanici_adi = sp.getString("kullanici_adi", "");
+        Log.e("TAG", "kullanici_adi: " + kullanici_adi);
+        int alintiSayisi = 0;
+        String alinti_yazisi = "Toplam <b>" + alintiSayisi + "</b>" + " alıntı paylaştı";
+        tvAlintiSayisi.setText(Html.fromHtml(alinti_yazisi));
+
+        textViewProfilKullaniciAdi.setText(kullanici_adi);
+
+        String url = "https://mehmetemin.xyz/sosyalOkur/getForMyProfile.php";
+        StringRequest postStringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    Log.e("TAG", "jsonObject: " + jsonObject);
+                    if (jsonObject.getString("success").equalsIgnoreCase("0")) {
+
+
+                    } else {
+                        JSONArray ALINTILAR = jsonObject.getJSONArray("alintilar"); // tablo adı
+                        Log.e("TAG", "ALINTILAR.length(): " + ALINTILAR.length());
+
+                        int alintiSayisi = jsonObject.getJSONArray("alintilar").getJSONObject(0).getInt("ALINTI_SAYISI");
+                        String alinti_yazisi = "Toplam <b>" + alintiSayisi + "</b>" + " alıntı paylaştı";
+                        tvAlintiSayisi.setText(Html.fromHtml(alinti_yazisi));
+                        String imageName = jsonObject.getJSONArray("alintilar").getJSONObject(0).getString("RESIM_ADI");
+
+                        imgPp.setImageResource(getResources()
+                                .getIdentifier(imageName, "drawable", getActivity().getPackageName()));
+                        for (int i = 0; i < ALINTILAR.length(); i++) {
+                            JSONObject alintilarjsonObject = ALINTILAR.getJSONObject(i);
+
+                            int ALINTI_ID = alintilarjsonObject.getInt("ALINTI_ID");
+                            int KULLANICI_ID = alintilarjsonObject.getInt("KULLANICI_ID");
+                            int KITAP_ID = alintilarjsonObject.getInt("KITAP_ID");
+                            String ALINTI_METNI = alintilarjsonObject.getString("ALINTI_METNI");
+                            String ALINTI_BASLIGI = alintilarjsonObject.getString("ALINTI_BASLIGI");
+                            String ALINTI_TARIHI = alintilarjsonObject.getString("ALINTI_TARIHI");
+                            String KULLANICI_ADI = alintilarjsonObject.getString("KULLANICI_ADI");
+                            String KITAP_ADI = alintilarjsonObject.getString("KITAP_ADI");
+                            String YAZAR_SOYADI = alintilarjsonObject.getString("YAZAR_SOYADI");
+                            String YAZAR_ADI = alintilarjsonObject.getString("YAZAR_ADI");
+                            String PIC_NAME = alintilarjsonObject.getString("PIC_NAME");
+                            int YAZAR_ID = alintilarjsonObject.getInt("YAZAR_ID");
+                            String YAZAR_RESIM_URL = alintilarjsonObject.getString("YAZAR_RESIM_URL");
+
+                            Yazar yazar = new Yazar(YAZAR_ID, YAZAR_ADI, YAZAR_SOYADI, YAZAR_RESIM_URL);
+                            Kitap kitap = new Kitap(KITAP_ID, KITAP_ADI, yazar);
+
+                            Alinti alinti = new Alinti(ALINTI_ID, KULLANICI_ID, KULLANICI_ADI, PIC_NAME,
+                                    kitap, ALINTI_METNI, ALINTI_BASLIGI, ALINTI_TARIHI);
+
+
+                            alintiArrayList.add(alinti);
+
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                verileriYerlestir(alintiArrayList);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("email", email);
+
+
+                return params;
+            }
+        };
+        Volley.newRequestQueue(getContext()).add(postStringRequest);
+
+
+    }
+
 
     private void getKullaniciProfili() {
         SharedPreferences sp = getActivity().getSharedPreferences("girisBilgileri", Context.MODE_PRIVATE);
@@ -89,6 +187,65 @@ public class FragmentMyProfile extends Fragment {
 
         getAlintilar(email);
 
+    }
+
+    private void getAlintilar(String email) {
+        // email'e göre kişinin yaptığı alıntılar getirilsin.
+
+        alintiArrayList = new ArrayList<>();
+
+        String url = "https://mehmetemin.xyz/sosyalOkur/getAlintilar.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray ALINTILAR = jsonObject.getJSONArray("alintilar"); // tablo adı
+
+                    for (int i = 0; i < ALINTILAR.length(); i++) {
+                        JSONObject alintilarjsonObject = ALINTILAR.getJSONObject(i);
+
+                        int ALINTI_ID = alintilarjsonObject.getInt("ALINTI_ID");
+                        int KULLANICI_ID = alintilarjsonObject.getInt("KULLANICI_ID");
+                        int KITAP_ID = alintilarjsonObject.getInt("KITAP_ID");
+                        String ALINTI_METNI = alintilarjsonObject.getString("ALINTI_METNI");
+                        String ALINTI_BASLIGI = alintilarjsonObject.getString("ALINTI_BASLIGI");
+                        String ALINTI_TARIHI = alintilarjsonObject.getString("ALINTI_TARIHI");
+                        String KULLANICI_ADI = alintilarjsonObject.getString("KULLANICI_ADI");
+                        String KITAP_ADI = alintilarjsonObject.getString("KITAP_ADI");
+                        String YAZAR_SOYADI = alintilarjsonObject.getString("YAZAR_SOYADI");
+                        String YAZAR_ADI = alintilarjsonObject.getString("YAZAR_ADI");
+                        String PIC_NAME = alintilarjsonObject.getString("PIC_NAME");
+                        int YAZAR_ID = alintilarjsonObject.getInt("YAZAR_ID");
+                        String YAZAR_RESIM_URL = alintilarjsonObject.getString("YAZAR_RESIM_URL");
+
+                        Yazar yazar = new Yazar(YAZAR_ID, YAZAR_ADI, YAZAR_SOYADI, YAZAR_RESIM_URL);
+                        Kitap kitap = new Kitap(KITAP_ID, KITAP_ADI, yazar);
+
+                        Alinti alinti = new Alinti(ALINTI_ID, KULLANICI_ID, KULLANICI_ADI, PIC_NAME,
+                                kitap, ALINTI_METNI, ALINTI_BASLIGI, ALINTI_TARIHI);
+
+                        Log.e("TAG", "Alıntı: " + alinti.getAlinti_resim_ad());
+
+                        alintiArrayList.add(alinti);
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+
+                }
+                verileriYerlestir(alintiArrayList);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+
+            }
+        });
+
+        Volley.newRequestQueue(getActivity().getApplicationContext()).add(stringRequest);
     }
 
     private void tasarimNesneleriniBaslat(View rootView) {
@@ -130,6 +287,7 @@ public class FragmentMyProfile extends Fragment {
                 SharedPreferences.Editor editor = sp.edit();
                 editor.putBoolean("girisYapildiMi", false);
                 editor.putString("email_adresi", "");
+                editor.putString("kullanici_adi", "");
                 editor.commit();
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -150,68 +308,11 @@ public class FragmentMyProfile extends Fragment {
         dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.divider_recyclerview));
         rv.addItemDecoration(dividerItemDecoration);
 
-        getKullaniciProfili();
+        //getKullaniciProfili();
+        getForProfile();
 
     }
 
-    private void getAlintilar(String email) {
-        // email'e göre kişinin yaptığı alıntılar getirilsin.
-
-        alintiArrayList = new ArrayList<>();
-
-        String url = "https://mehmetemin.xyz/sosyalOkur/getAlintilar.php";
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    JSONArray ALINTILAR = jsonObject.getJSONArray("alintilar"); // tablo adı
-
-                    for (int i = 0; i < ALINTILAR.length(); i++) {
-                        JSONObject alintilarjsonObject = ALINTILAR.getJSONObject(i);
-
-                        int ALINTI_ID = alintilarjsonObject.getInt("ALINTI_ID");
-                        int KULLANICI_ID = alintilarjsonObject.getInt("KULLANICI_ID");
-                        int KITAP_ID = alintilarjsonObject.getInt("KITAP_ID");
-                        String ALINTI_METNI = alintilarjsonObject.getString("ALINTI_METNI");
-                        String ALINTI_BASLIGI = alintilarjsonObject.getString("ALINTI_BASLIGI");
-                        String ALINTI_TARIHI = alintilarjsonObject.getString("ALINTI_TARIHI");
-                        String KULLANICI_ADI = alintilarjsonObject.getString("KULLANICI_ADI");
-                        String KITAP_ADI = alintilarjsonObject.getString("KITAP_ADI");
-                        String YAZAR_SOYADI = alintilarjsonObject.getString("YAZAR_SOYADI");
-                        String YAZAR_ADI = alintilarjsonObject.getString("YAZAR_ADI");
-                        String PIC_NAME = alintilarjsonObject.getString("PIC_NAME");
-                        int YAZAR_ID = alintilarjsonObject.getInt("YAZAR_ID");
-                        String YAZAR_RESIM_URL = alintilarjsonObject.getString("YAZAR_RESIM_URL");
-
-                        Yazar yazar = new Yazar(YAZAR_ID, YAZAR_ADI, YAZAR_SOYADI,YAZAR_RESIM_URL);
-                        Kitap kitap = new Kitap(KITAP_ID, KITAP_ADI, yazar);
-
-                        Alinti alinti = new Alinti(ALINTI_ID, KULLANICI_ID, KULLANICI_ADI, PIC_NAME,
-                                kitap, ALINTI_METNI, ALINTI_BASLIGI, ALINTI_TARIHI);
-
-                        Log.e("TAG", "Alıntı: " + alinti.getAlinti_resim_ad());
-
-                        alintiArrayList.add(alinti);
-
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-
-                }
-                verileriYerlestir(alintiArrayList);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-
-            }
-        });
-
-        Volley.newRequestQueue(getActivity().getApplicationContext()).add(stringRequest);
-    }
 
     private void verileriYerlestir(ArrayList<Alinti> alintiArrayList) {
         ////Log.e("TAG", "verileriYerlestir: " + paylasimArrayList);

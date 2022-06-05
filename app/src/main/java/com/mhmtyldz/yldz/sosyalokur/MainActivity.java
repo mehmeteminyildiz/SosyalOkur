@@ -110,7 +110,9 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences("girisBilgileri", MODE_PRIVATE);
         boolean girisYapildiMi = sp.getBoolean("girisYapildiMi", false);
         String email = sp.getString("email_adresi", "");
-        String toastMesaj = "girisYapildiMi: " + girisYapildiMi + "\nEmail: " + email;
+        String kullanici_adi = sp.getString("kullanici_adi", "");
+        String toastMesaj = "girisYapildiMi: " + girisYapildiMi + "\nEmail: " + email
+                +"\nkullanici_adi: " + kullanici_adi;
         Log.e("TAG", "main act - " + toastMesaj);
     }
 

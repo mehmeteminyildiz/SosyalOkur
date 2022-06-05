@@ -38,8 +38,6 @@ public class AraKitapAdapter extends RecyclerView.Adapter<AraKitapAdapter.CardVi
             tvKitapAdi = itemView.findViewById(R.id.tvKitapAdi);
             tvYazarAdi = itemView.findViewById(R.id.tvYazarAd);
             cl = itemView.findViewById(R.id.cl);
-
-
         }
     }
 
@@ -67,7 +65,7 @@ public class AraKitapAdapter extends RecyclerView.Adapter<AraKitapAdapter.CardVi
                 Intent intent = new Intent(mContext, KitapActivity.class);
                 intent.putExtra("kitap_adi", holder.tvKitapAdi.getText().toString().trim());
                 intent.putExtra("yazar_ad", yazarAd);
-                intent.putExtra("yazar_soyad",yazarSoyad);
+                intent.putExtra("yazar_soyad", yazarSoyad);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // yeni activity'e geçerken kullandık
                 mContext.startActivity(intent);
             }

@@ -1,5 +1,6 @@
 package com.mhmtyldz.yldz.sosyalokur.Activities;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -18,14 +19,26 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.mhmtyldz.yldz.sosyalokur.Adapters.AraKitapAdapter;
 import com.mhmtyldz.yldz.sosyalokur.R;
+import com.mhmtyldz.yldz.sosyalokur.Siniflar.Alinti;
 import com.mhmtyldz.yldz.sosyalokur.Siniflar.Kitap;
 import com.mhmtyldz.yldz.sosyalokur.Siniflar.Yazar;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class YazarActivity extends AppCompatActivity {
     private String gelenYazarAd;
@@ -53,8 +66,6 @@ public class YazarActivity extends AppCompatActivity {
         kitapArrayList = new ArrayList<>();
         kitapAdapter = new AraKitapAdapter(getApplicationContext(), kitapArrayList);
         tasarimNesneleriniBaslat();
-
-
 
 
         btnKitaplariGoster.setOnClickListener(new View.OnClickListener() {
@@ -114,13 +125,79 @@ public class YazarActivity extends AppCompatActivity {
         gelenYazarSoyad = bundle.getString("yazar_soyadi");
         tvYazarAdi.setText(gelenYazarAd + " " + gelenYazarSoyad);
 
-        getYazarBilgileriveKitaplari(gelenYazarAd);
+        getForYazar();
+        //getYazarBilgileriveKitaplari(gelenYazarAd);
+    }
+
+    private void getForYazar() {
+
+        String url = "https://mehmetemin.xyz/sosyalOkur/getForYazar.php";
+        StringRequest postStringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    kitapArrayList.clear();
+                    kitapAdapter.notifyDataSetChanged();
+                    kitapArrayList = new ArrayList<>();
+
+                    JSONArray YAZAR = jsonObject.getJSONArray("Yazar"); // tablo adı
+
+                    String resim_url = YAZAR.getJSONObject(0).getString("yazar_resim_url");
+                    String yazarBiyografi = YAZAR.getJSONObject(0).getString("yazar_biyografi");
+                    int YAZAR_ID = YAZAR.getJSONObject(0).getInt("YAZAR_ID");
+
+
+                    tvYazarBiyografi.setText(yazarBiyografi);
+                    new FetchImage(resim_url).start();
+
+
+                    JSONArray KITAPLAR = jsonObject.getJSONArray("Kitaplar"); // tablo adı
+
+                    for (int i = 0; i < KITAPLAR.length(); i++) {
+                        JSONObject kitaplarjsonObject = KITAPLAR.getJSONObject(i);
+
+                        String KITAP_ADI = kitaplarjsonObject.getString("KITAP_ADI");
+                        int KITAP_ID = kitaplarjsonObject.getInt("KITAP_ID");
+
+                        Yazar yazar = new Yazar(YAZAR_ID, gelenYazarAd, gelenYazarSoyad, resim_url);
+                        Kitap kitap = new Kitap(KITAP_ID, KITAP_ADI, yazar);
+                        kitapArrayList.add(kitap);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                verileriYerlestirKitap(kitapArrayList);
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("yazar_adi", gelenYazarAd);
+                params.put("yazar_soyadi", gelenYazarSoyad);
+
+
+                return params;
+            }
+        };
+        Volley.newRequestQueue(YazarActivity.this).add(postStringRequest);
+
 
     }
 
     private void getYazarBilgileriveKitaplari(String gelenYazarAdi) {
         // load image:
-        String url = "https://mehmetemin.xyz/images/mehmet_photo.jpeg";
+        String url = "https://i.pinimg.com/564x/c0/73/69/c0736966d8b5dd522791bea513852ce0.jpg";
         new FetchImage(url).start();
 
         //
@@ -129,7 +206,7 @@ public class YazarActivity extends AppCompatActivity {
         // burada DB'den verileri getirmeliyiz.
         kitapAdapter.notifyDataSetChanged();
         kitapArrayList = new ArrayList<>();
-        Yazar yazar = new Yazar(1, gelenYazarAdi, gelenYazarSoyad,url);
+        Yazar yazar = new Yazar(1, gelenYazarAdi, gelenYazarSoyad, url);
         kitapArrayList.add(new Kitap(1, "Yazarın Kitabı - 1", yazar));
         kitapArrayList.add(new Kitap(1, "Yazarın Kitabı - 2", yazar));
         kitapArrayList.add(new Kitap(1, "Yazarın Kitabı - 3", yazar));
@@ -151,9 +228,9 @@ public class YazarActivity extends AppCompatActivity {
         rv.setAdapter(kitapAdapter);
 
         if (kitapArrayList.size() <= 0) {
-            Toast.makeText(this, "Bulunamadı", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Yazarın kitabı yok", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "Bulundu!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Yazarın kitapları geldi", Toast.LENGTH_SHORT).show();
 
         }
     }

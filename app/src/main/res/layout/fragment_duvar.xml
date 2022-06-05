@@ -63,7 +63,6 @@
         android:layout_marginEnd="16dp"
         android:fontFamily="sans-serif-light"
         android:gravity="center"
-        android:text="Günün Konusu: İnsanlar neden az kitap okuyor?"
         android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -1,5 +1,6 @@
 package com.mhmtyldz.yldz.sosyalokur.Activities;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -15,9 +16,23 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.textfield.TextInputLayout;
 import com.mhmtyldz.yldz.sosyalokur.MainActivity;
 import com.mhmtyldz.yldz.sosyalokur.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
     private TextInputLayout tilEmail, tilParola;
@@ -25,12 +40,16 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnGiris, btnKayitOl;
     private String email = "";
     private String parola = "";
+    private String kullanici_adi = "";
+
+    private String yanit;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        yanit = "yanlis";
 
         tasarimNesneleriniBaslat();
         girisKontrol();
@@ -40,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences("girisBilgileri", MODE_PRIVATE);
         boolean girisYapilmisMi = sp.getBoolean("girisYapildiMi", false);
         email = sp.getString("email_adresi", "");
+        kullanici_adi = sp.getString("kullanici_adi", "");
         Log.e("TAG", "girisYapilmisMi: " + girisYapilmisMi);
         if (girisYapilmisMi) {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -128,24 +148,70 @@ public class LoginActivity extends AppCompatActivity {
         } else if (TextUtils.isEmpty(parola)) {
             tilParola.setError("Parolanı gir");
         } else {
-            girisIslemiYap(email, parola);
+            getForBildirimDetay(email, parola);
+
         }
     }
 
-    private void girisIslemiYap(String email, String parola) {
-        Toast.makeText(LoginActivity.this, "Email: " + email + "\nParola: " + parola, Toast.LENGTH_SHORT).show();
-        // email ve parola DB'den kontrol edilir.
-        if (email.equals("mhmtxyildiz@gmail.com") && parola.equals("123")) {
-            SharedPreferences sp = getSharedPreferences("girisBilgileri", MODE_PRIVATE);
-            SharedPreferences.Editor editor = sp.edit();
-            editor.putBoolean("girisYapildiMi", true);
-            editor.putString("email_adresi", email);
-            editor.commit();
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-            finish();
-        } else { // Yanlış ise:
-            Toast.makeText(LoginActivity.this, "Email veya Parola Hatalı", Toast.LENGTH_SHORT).show();
-            
-        }
+
+    private void getForBildirimDetay(String email, String parola) {
+        String url = "https://mehmetemin.xyz/sosyalOkur/login.php";
+
+        StringRequest postStringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    Log.e("TAG", "onResponse: " + response.toString().trim());
+
+                    if (jsonObject.getString("success").equals("1")) {
+                        kullanici_adi = jsonObject.getString("KULLANICI_ADI");
+                        girisBasarili();
+
+                        Log.e("TAG", "kullanici_adi: " + kullanici_adi);
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Email veya Parola Hatalı"
+                                , Toast.LENGTH_SHORT).show();
+
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(LoginActivity.this, "Bir hata oluştu", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(LoginActivity.this, "Bir hata oluştu", Toast.LENGTH_SHORT).show();
+
+            }
+        }) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("email", email);
+                params.put("password", parola);
+
+                return params;
+            }
+        };
+        Volley.newRequestQueue(this).add(postStringRequest);
+
+    }
+
+    private void girisBasarili() {
+        SharedPreferences sp = getSharedPreferences("girisBilgileri", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean("girisYapildiMi", true);
+        editor.putString("email_adresi", email);
+        editor.putString("kullanici_adi", kullanici_adi);
+        editor.commit();
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        finish();
     }
 }

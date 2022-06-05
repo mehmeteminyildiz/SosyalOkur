@@ -6,34 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".Activities.ProfileActivity">
 
-    <TextView
-        android:id="@+id/tvKullaniciAdi"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="50dp"
-        android:fontFamily="sans-serif-medium"
-        android:gravity="center"
-        android:text="kullaniciAdi"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imgBack"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/view7"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="4dp"
-        android:background="@color/yatay_cizgi"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvKullaniciAdi" />
-
     <ImageButton
         android:id="@+id/imgBack"
         android:layout_width="30dp"
@@ -51,14 +23,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         app:cardBackgroundColor="#FFFFFF"
         app:cardCornerRadius="10dp"
         app:cardElevation="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view7">
+        app:layout_constraintTop_toBottomOf="@+id/imgBack">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -73,18 +45,34 @@
                 android:layout_marginTop="8dp"
                 android:elevation="10dp"
                 android:foregroundGravity="center"
-                android:src="@drawable/alien1"
+                android:src="@drawable/avatar"
                 app:civ_border_width="2dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/tvKullaniciAdi"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="sans-serif-black"
+                android:gravity="center"
+                android:text="kullaniciAdi"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imgPp" />
+
+            <TextView
                 android:id="@+id/tvAlintiSayisi"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:fontFamily="sans-serif-light"
                 android:gravity="center"
@@ -92,7 +80,7 @@
                 android:textColor="@color/text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imgPp" />
+                app:layout_constraintTop_toBottomOf="@+id/tvKullaniciAdi" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

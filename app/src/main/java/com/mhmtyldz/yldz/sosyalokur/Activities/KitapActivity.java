@@ -1,5 +1,6 @@
 package com.mhmtyldz.yldz.sosyalokur.Activities;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -30,6 +32,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class KitapActivity extends AppCompatActivity {
 
@@ -54,40 +58,8 @@ public class KitapActivity extends AppCompatActivity {
 
         tasarimNesneleriniBaslat();
 
-        // gelen kullaniciAdi değerini alalım:
-
 
     }
-
-
-//    private void okumaListesindeVarMiCheck(String gelenKitapAdi, String yazar_ad, String yazar_soyad) {
-//
-//        // DB'den okuma listesinde olup olmadığını kontrol et.
-//        okumaListesindeVarMi = !okumaListesindeVarMi;
-//        if (okumaListesindeVarMi) {
-//            imgOkumaListemeEkle.setImageResource(R.drawable.icon_book);
-//        } else {
-//            imgOkumaListemeEkle.setImageResource(R.drawable.icon_book_outlined);
-//        }
-//        imgOkumaListemeEkle.setEnabled(true);
-//
-//        getAlintilarByKitapAdi(gelenKitapAdi, yazar_ad, yazar_soyad);
-//
-//
-//    }
-
-//    private void okumaListesineEkle(String email_adresi, String gelenKitapAdi) {
-//        okumaListesindeVarMi = true;
-//        imgOkumaListemeEkle.setImageResource(R.drawable.icon_book);
-//        // email_adresi ve gelenKitapAdi DB'ye gönderilerek kullanıcının okuma listesine kitap eklensin
-//
-//    }
-//
-//    private void okumaListesindenSil(String email_adresi, String gelenKitapAdi) {
-//        okumaListesindeVarMi = false;
-//        imgOkumaListemeEkle.setImageResource(R.drawable.icon_book_outlined);
-//        // email_adresi ve gelenKitapAdi DB'ye gönderilerek kullanıcının okuma listesinden kitap silinsin.
-//    }
 
     private void tasarimNesneleriniBaslat() {
         tvKitapAdi = findViewById(R.id.tvKitapAdi);
@@ -104,24 +76,14 @@ public class KitapActivity extends AppCompatActivity {
     }
 
     private void setListeners() {
-//        imgOkumaListemeEkle.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (okumaListesindeVarMi) {
-//                    okumaListesindenSil("email_adresi", gelenKitapAdi);
-//                } else {
-//                    okumaListesineEkle("email_adresi", gelenKitapAdi);
-//                }
-//
-//            }
-//        });
+
 
         tvYazarAdi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(KitapActivity.this, YazarActivity.class);
                 intent.putExtra("yazar_adi", gelenYazarAd);
-                intent.putExtra("yazar_soyadi",gelenYazarSoyad);
+                intent.putExtra("yazar_soyadi", gelenYazarSoyad);
                 startActivity(intent);
             }
         });
@@ -180,7 +142,78 @@ public class KitapActivity extends AppCompatActivity {
         //Log.e("TAG", "kitapAdiniYerlestir: " + gelenYazarAd + " -- " + gelenYazarSoyad);
         tvKitapAdi.setText(gelenKitapAdi);
         tvYazarAdi.setText(gelenYazarAd + " " + gelenYazarSoyad);
-        getKitapBilgileriByKitapAdi(gelenKitapAdi, gelenYazarAd, gelenYazarSoyad);
+        //getKitapBilgileriByKitapAdi(gelenKitapAdi, gelenYazarAd, gelenYazarSoyad);
+        getForKitap();
+    }
+
+    private void getForKitap() {
+
+        String url = "https://mehmetemin.xyz/sosyalOkur/getForKitapActivity.php";
+        StringRequest postStringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONArray KITAP = jsonObject.getJSONArray("Kitap"); // tablo adı
+                    String kitap_ozeti = KITAP.getJSONObject(0).getString("KITAP_OZET");
+                    tvKitapOzeti.setText(kitap_ozeti.trim());
+
+                    JSONArray ALINTILAR = jsonObject.getJSONArray("ALINTILAR"); // tablo adı
+
+                    for (int i = 0; i < ALINTILAR.length(); i++) {
+                        JSONObject alintilarjsonObject = ALINTILAR.getJSONObject(i);
+
+                        int ALINTI_ID = alintilarjsonObject.getInt("ALINTI_ID");
+                        int KULLANICI_ID = alintilarjsonObject.getInt("KULLANICI_ID");
+                        int KITAP_ID = alintilarjsonObject.getInt("KITAP_ID");
+                        String ALINTI_METNI = alintilarjsonObject.getString("ALINTI_METNI");
+                        String ALINTI_BASLIGI = alintilarjsonObject.getString("ALINTI_BASLIGI");
+                        String ALINTI_TARIHI = alintilarjsonObject.getString("ALINTI_TARIHI");
+                        String KULLANICI_ADI = alintilarjsonObject.getString("KULLANICI_ADI");
+                        String KITAP_ADI = alintilarjsonObject.getString("KITAP_ADI");
+                        String YAZAR_ADI = alintilarjsonObject.getString("YAZAR_ADI");
+                        String YAZAR_SOYADI = alintilarjsonObject.getString("YAZAR_SOYADI");
+                        String PIC_NAME = alintilarjsonObject.getString("PIC_NAME");
+                        int YAZAR_ID = alintilarjsonObject.getInt("YAZAR_ID");
+                        String YAZAR_RESIM_URL = alintilarjsonObject.getString("YAZAR_RESIM_URL");
+
+                        Yazar yazar = new Yazar(YAZAR_ID, YAZAR_ADI, YAZAR_SOYADI, YAZAR_RESIM_URL);
+                        Kitap kitap = new Kitap(KITAP_ID, KITAP_ADI, yazar);
+
+                        Alinti alinti = new Alinti(ALINTI_ID, KULLANICI_ID, KULLANICI_ADI, PIC_NAME,
+                                kitap, ALINTI_METNI, ALINTI_BASLIGI, ALINTI_TARIHI);
+
+                        alintiArrayList.add(alinti);
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                verileriYerlestir(alintiArrayList);
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("kitap_adi", gelenKitapAdi);
+
+
+                return params;
+            }
+        };
+        Volley.newRequestQueue(KitapActivity.this).add(postStringRequest);
+
+
     }
 
 
@@ -195,8 +228,6 @@ public class KitapActivity extends AppCompatActivity {
         tvKitapOzeti.setText(kitap_ozeti.trim());
         getAlintilarByKitapAdi(gelenKitapAdi, yazar_ad, yazar_soyad);
         //okumaListesindeVarMiCheck(gelenKitapAdi, yazar_ad, yazar_soyad);
-
-
     }
 
     private void getAlintilarByKitapAdi(String gelenKitapAdi, String yazar_ad, String yazar_soyad) {
@@ -226,7 +257,6 @@ public class KitapActivity extends AppCompatActivity {
                         String PIC_NAME = alintilarjsonObject.getString("PIC_NAME");
                         int YAZAR_ID = alintilarjsonObject.getInt("YAZAR_ID");
                         String YAZAR_RESIM_URL = "URL ADRESI";
-
 
 
                         Yazar yazar = new Yazar(YAZAR_ID, YAZAR_ADI, YAZAR_SOYADI, YAZAR_RESIM_URL);

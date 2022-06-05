@@ -22,6 +22,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.textfield.TextInputLayout;
 import com.mhmtyldz.yldz.sosyalokur.Adapters.AraKitapAdapter;
 import com.mhmtyldz.yldz.sosyalokur.Adapters.AraYazarAdapter;
@@ -29,8 +35,14 @@ import com.mhmtyldz.yldz.sosyalokur.R;
 import com.mhmtyldz.yldz.sosyalokur.Siniflar.Kitap;
 import com.mhmtyldz.yldz.sosyalokur.Siniflar.Yazar;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FragmentAra extends Fragment {
 
@@ -46,6 +58,7 @@ public class FragmentAra extends Fragment {
     private AraKitapAdapter kitapAdapter;
     private AraYazarAdapter yazarAdapter;
     private TextView tvKitap, tvYazar;
+
 
     @Nullable
     @Override
@@ -64,6 +77,7 @@ public class FragmentAra extends Fragment {
         tvKitap.setTextColor(getResources().getColor(R.color.black));
 
         rvKitap.setHasFixedSize(true);
+
         rvKitap.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
 
         rvYazar.setHasFixedSize(true);
@@ -84,7 +98,6 @@ public class FragmentAra extends Fragment {
                 //Log.e("TAG", "onTextChanged:" + charSequence.toString().trim()+"." );
                 tilAramaEkrani.setErrorEnabled(false);
                 tilAramaEkrani.setError(null);
-
             }
 
             @Override
@@ -96,7 +109,6 @@ public class FragmentAra extends Fragment {
         tilAramaEkrani.setEndIconOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (secim) { // true: yazar aranacak
                     Toast.makeText(getContext(), "Yazar aranacak", Toast.LENGTH_SHORT).show();
                     hideKeyboard(imm);
@@ -112,8 +124,6 @@ public class FragmentAra extends Fragment {
                     String aramaMetni = tietAramaEkrani.getText().toString().trim();
                     aramaMetni = aramaMetni.replace("'", "`");
                     getKitaplarByKitapAdi(aramaMetni);
-
-
                 }
 
 
@@ -191,114 +201,125 @@ public class FragmentAra extends Fragment {
         return rootView;
     }
 
-
     private void getYazarlarByYazarAdi(String aramaMetni) {
+        ArrayList<Yazar> geciciArrayList = new ArrayList<>();
 
-        Toast.makeText(getContext(), "Yazar: " + aramaMetni, Toast.LENGTH_SHORT).show();
         if (aramaMetni.equals("")) {
             tilAramaEkrani.setError("Bir yazar adı girmelisin!");
         } else {
             tietAramaEkrani.setText("");
             yazarArrayList.clear();
-
-
-            ArrayList<Yazar> geciciArrayList = new ArrayList<>();
-
-            String YAZAR_RESIM_URL = "url";
-
-            if (aramaMetni.equals("a")) {
-                for (int i = 0; i < 10; i++) {
-                    geciciArrayList.add(new Yazar(i, "Jules", "Payot", YAZAR_RESIM_URL));
-                    geciciArrayList.add(new Yazar(1, "Yazar Adı asdasdasd", "Soyadı", YAZAR_RESIM_URL));
-
-                }
-
-            } else {
-                geciciArrayList.add(new Yazar(1, "Yazar Adı", "Soyadı", YAZAR_RESIM_URL));
-                geciciArrayList.add(new Yazar(1, "Yazar Adı", "Soyadı", YAZAR_RESIM_URL));
-                geciciArrayList.add(new Yazar(1, "Yazar Adı", "Soyadı", YAZAR_RESIM_URL));
-                geciciArrayList.add(new Yazar(1, "Yazar Adı", "Soyadı", YAZAR_RESIM_URL));
-                geciciArrayList.add(new Yazar(1, "Yazar Adı", "Soyadı", YAZAR_RESIM_URL));
-            }
-            yazarArrayList.addAll(geciciArrayList);
-            yazarAdapter.notifyDataSetChanged();
-
-
-            //verileriYerlestirYazar(yazarArrayList);
-
         }
+
+        String url = "https://mehmetemin.xyz/sosyalOkur/getYazarFromYazarAdiOrSoyadi.php";
+
+        StringRequest postStringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray yazarlar = jsonObject.getJSONArray("yazarlar");
+
+
+                    for (int i = 0; i < yazarlar.length(); i++) {  // kullanici_id alınır
+                        JSONObject k = yazarlar.getJSONObject(i);
+                        String yazar_ad = k.getString("AD");
+                        String yazar_soyad = k.getString("SOYAD");
+                        int id = k.getInt("ID");
+                        String yazar_resim_url = k.getString("YAZAR_RESIM_URL");
+                        geciciArrayList.add(new Yazar(id, yazar_ad, yazar_soyad, yazar_resim_url));
+                    }
+
+                    yazarArrayList.addAll(geciciArrayList);
+
+                    yazarAdapter.notifyDataSetChanged();
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("parametre", aramaMetni);
+
+                return params;
+            }
+        };
+        Volley.newRequestQueue(getContext()).add(postStringRequest);
     }
 
     private void getKitaplarByKitapAdi(String aramaMetni) {
+        ArrayList<Kitap> geciciArrayList = new ArrayList<>();
+
+
         if (aramaMetni.equals("")) {
             tilAramaEkrani.setError("Bir kitap adı girmelisin!");
         } else {
             tietAramaEkrani.setText("");
-
             kitapArrayList.clear();
-            //kitapAdapter.notifyDataSetChanged();
+        }
 
-            // burada DB'den verileri getirmeliyiz.
-            ArrayList<Kitap> geciciListe = new ArrayList<>();
+        String url = "https://mehmetemin.xyz/sosyalOkur/getKitapFromKitapAdi.php";
+
+        StringRequest postStringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray kitaplar = jsonObject.getJSONArray("kitaplar");
 
 
-            if (aramaMetni.equals("a")) {
-                String YAZAR_RESIM_URL = "url";
-                Yazar yazar = new Yazar(1, "İlber", "Ortaylı", YAZAR_RESIM_URL);
-                geciciListe.add(new Kitap(1, "Nutuk", yazar));
-                geciciListe.add(new Kitap(2, "Nutuk", yazar));
-                geciciListe.add(new Kitap(3, "Nutuk", yazar));
-                geciciListe.add(new Kitap(4, "Nutuk", yazar));
-                geciciListe.add(new Kitap(5, "Nutuk", yazar));
-            } else {
-                String YAZAR_RESIM_URL = "url";
-                Yazar yazar = new Yazar(1, "İlber", "Ortaylı",YAZAR_RESIM_URL );
-                geciciListe.add(new Kitap(1, "Türklerin Tarihi", yazar));
-                geciciListe.add(new Kitap(2, "Türklerin Tarihi", yazar));
-                geciciListe.add(new Kitap(3, "Türklerin Tarihi", yazar));
-                geciciListe.add(new Kitap(4, "Türklerin Tarihi", yazar));
-                geciciListe.add(new Kitap(5, "Türklerin Tarihi", yazar));
+                    for (int i = 0; i < kitaplar.length(); i++) {  // kullanici_id alınır
+                        JSONObject k = kitaplar.getJSONObject(i);
+                        int KITAP_ID = k.getInt("KITAP_ID");
+                        String KITAP_ADI = k.getString("KITAP_ADI");
+                        String KITAP_OZET = k.getString("KITAP_OZET");
+
+                        int YAZAR_ID = k.getInt("YAZAR_ID");
+                        String YAZAR_RESIM_URL = k.getString("YAZAR_RESIM_URL");
+                        String YAZAR_ADI = k.getString("YAZAR_ADI");
+                        String YAZAR_SOYADI = k.getString("YAZAR_SOYADI");
+                        Yazar yazar = new Yazar(YAZAR_ID, YAZAR_ADI, YAZAR_SOYADI, YAZAR_RESIM_URL);
+
+                        geciciArrayList.add(new Kitap(KITAP_ID, KITAP_ADI, yazar));
+                    }
+
+                    kitapArrayList.addAll(geciciArrayList);
+
+                    kitapAdapter.notifyDataSetChanged();
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-            kitapArrayList.addAll(geciciListe);
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("kitap_adi", aramaMetni);
 
-            kitapAdapter.notifyDataSetChanged();
-
-            //kitapAdapter = new AraKitapAdapter(getActivity().getApplicationContext(), kitapArrayList);
-            //rv.setAdapter(kitapAdapter);
-            //verileriYerlestirKitap(kitapArrayList);
-        }
+                return params;
+            }
+        };
+        Volley.newRequestQueue(getContext()).add(postStringRequest);
     }
 
-    private void verileriYerlestirKitap(ArrayList<Kitap> kitapArrayList) {
-        //rv.setAdapter(null);
-        kitapAdapter = new AraKitapAdapter(getActivity().getApplicationContext(), kitapArrayList);
-        rvKitap.setAdapter(kitapAdapter);
 
-        if (kitapArrayList.size() <= 0) {
-            Toast.makeText(getContext(), "Bulunamadı", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getContext(), "Bulundu!", Toast.LENGTH_SHORT).show();
 
-        }
-    }
-
-    private void verileriYerlestirYazar(ArrayList<Yazar> yazarArrayList) {
-        rvYazar.setAdapter(null);
-
-        yazarAdapter = new AraYazarAdapter(getActivity().getApplicationContext(), yazarArrayList);
-        rvYazar.setAdapter(yazarAdapter);
-
-        if (yazarArrayList.size() <= 0) {
-            Toast.makeText(getContext(), "Bulunamadı", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getContext(), "Bulundu!", Toast.LENGTH_SHORT).show();
-
-        }
-    }
-
-    private void showKeyboard(InputMethodManager imm) {
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-    }
 
     private void hideKeyboard(InputMethodManager imm) {
         imm.hideSoftInputFromWindow(tietAramaEkrani.getWindowToken(), 0);

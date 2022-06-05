@@ -1,5 +1,6 @@
 package com.mhmtyldz.yldz.sosyalokur.Activities;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -17,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -25,6 +27,7 @@ import com.android.volley.toolbox.Volley;
 import com.mhmtyldz.yldz.sosyalokur.Adapters.AlintiAdapter;
 import com.mhmtyldz.yldz.sosyalokur.R;
 import com.mhmtyldz.yldz.sosyalokur.Siniflar.Alinti;
+import com.mhmtyldz.yldz.sosyalokur.Siniflar.Duvar;
 import com.mhmtyldz.yldz.sosyalokur.Siniflar.Kitap;
 import com.mhmtyldz.yldz.sosyalokur.Siniflar.Yazar;
 
@@ -33,6 +36,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -68,50 +73,36 @@ public class ProfileActivity extends AppCompatActivity {
         gelenKullaniciAdi = bundle.getString("kullanici_adi");
         tvKullaniciAdi.setText(gelenKullaniciAdi);
 
-        getKullaniciProfili();
+        getForProfile();
 
 
     }
 
-    private void getKullaniciProfili() {
-
-        // burada DB'den kullanıcı bilgileri getirilir. ve arayüze yansıtılır
-        String imageName = "alien2";
-        String kullanici_adi = "mehmetemin_yildiz";
-        int alinti_sayisi = 15;
-        //int okuma_listesi_sayisi = 31;
-        //int okudugu_kitap_sayisi = 5;
-
-        String alinti_yazisi = "Toplam <b>" + alinti_sayisi + "</b>" + " alıntı paylaştı";
-        //String okuma_listesi_yazisi = "Okuma listesinde <b>" + okuma_listesi_sayisi + "</b>" + " kitap var";
-        //String okudugu_kitap_sayisi_yazisi = "Bugüne kadar <b>" + okudugu_kitap_sayisi + "</b>" + " kitap okudu";
-
-        tvAlintiSayisi.setText(Html.fromHtml(alinti_yazisi));
-        //tvOkumaListesiSayisi.setText(Html.fromHtml(okuma_listesi_yazisi));
-        //tvOkuduguSayisi.setText(Html.fromHtml(okudugu_kitap_sayisi_yazisi));
-        imgPp.setImageResource(getResources()
-                .getIdentifier(imageName, "drawable", getPackageName()));
-
-        getAlintilar();
-
-    }
-
-    private void getAlintilar() {
-        // Kullanıcının paylaştığı alıntılar burada DB'den getirilecek.
-        Log.e("TAG", "getAlintilar by " + gelenKullaniciAdi);
-
+    private void getForProfile() {
         alintiArrayList = new ArrayList<>();
 
-        String url = "https://mehmetemin.xyz/sosyalOkur/getAlintilar.php";
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+        SharedPreferences sp = getSharedPreferences("girisBilgileri", MODE_PRIVATE);
+        String email = sp.getString("email_adresi", ""); // email DB'ye gönderilecek
+
+        String url = "https://mehmetemin.xyz/sosyalOkur/getForProfile.php";
+        StringRequest postStringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     JSONArray ALINTILAR = jsonObject.getJSONArray("alintilar"); // tablo adı
 
+                    int alintiSayisi = jsonObject.getJSONArray("alintilar").getJSONObject(0).getInt("ALINTI_SAYISI");
+                    String alinti_yazisi = "Toplam <b>" + alintiSayisi + "</b>" + " alıntı paylaştı";
+                    tvAlintiSayisi.setText(Html.fromHtml(alinti_yazisi));
+                    String imageName = jsonObject.getJSONArray("alintilar").getJSONObject(0).getString("RESIM_ADI");
+
+                    imgPp.setImageResource(getResources()
+                            .getIdentifier(imageName, "drawable", getPackageName()));
                     for (int i = 0; i < ALINTILAR.length(); i++) {
                         JSONObject alintilarjsonObject = ALINTILAR.getJSONObject(i);
+
 
                         int ALINTI_ID = alintilarjsonObject.getInt("ALINTI_ID");
                         int KULLANICI_ID = alintilarjsonObject.getInt("KULLANICI_ID");
@@ -125,9 +116,8 @@ public class ProfileActivity extends AppCompatActivity {
                         String YAZAR_ADI = alintilarjsonObject.getString("YAZAR_ADI");
                         String PIC_NAME = alintilarjsonObject.getString("PIC_NAME");
                         int YAZAR_ID = alintilarjsonObject.getInt("YAZAR_ID");
-                        String YAZAR_RESIM_URL = "URL ADRESI";
-
-
+                        String YAZAR_RESIM_URL = alintilarjsonObject.getString("YAZAR_RESIM_URL");
+                        ;
 
                         Yazar yazar = new Yazar(YAZAR_ID, YAZAR_ADI, YAZAR_SOYADI, YAZAR_RESIM_URL);
                         Kitap kitap = new Kitap(KITAP_ID, KITAP_ADI, yazar);
@@ -135,28 +125,37 @@ public class ProfileActivity extends AppCompatActivity {
                         Alinti alinti = new Alinti(ALINTI_ID, KULLANICI_ID, KULLANICI_ADI, PIC_NAME,
                                 kitap, ALINTI_METNI, ALINTI_BASLIGI, ALINTI_TARIHI);
 
-                        Log.e("TAG", "Alıntı: " + alinti.getAlinti_resim_ad());
 
                         alintiArrayList.add(alinti);
 
                     }
-
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
-
                 }
                 verileriYerlestir(alintiArrayList);
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 
-
             }
-        });
+        }) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("username", gelenKullaniciAdi);
 
-        Volley.newRequestQueue(getApplicationContext()).add(stringRequest);
+
+                return params;
+            }
+        };
+        Volley.newRequestQueue(ProfileActivity.this).add(postStringRequest);
+
+
     }
+
 
     private void verileriYerlestir(ArrayList<Alinti> alintiArrayList) {
         ////Log.e("TAG", "verileriYerlestir: " + paylasimArrayList);
