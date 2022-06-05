@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "FAB clicked in Okuma Listesi", Toast.LENGTH_SHORT).show();
                     showKitapEkleDialog();
                     //kitapEkleSayfasinaGit();
-                } */else if (seciliSayfa == R.id.miDuvar) {
+                } */ else if (seciliSayfa == R.id.miDuvar) {
                     // duvara mesaj ekle:
                     Toast.makeText(MainActivity.this, "FAB clicked in Duvar", Toast.LENGTH_SHORT).show();
                 } else if (seciliSayfa == R.id.miAra) {
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         String email = sp.getString("email_adresi", "");
         String kullanici_adi = sp.getString("kullanici_adi", "");
         String toastMesaj = "girisYapildiMi: " + girisYapildiMi + "\nEmail: " + email
-                +"\nkullanici_adi: " + kullanici_adi;
+                + "\nkullanici_adi: " + kullanici_adi;
         Log.e("TAG", "main act - " + toastMesaj);
     }
 

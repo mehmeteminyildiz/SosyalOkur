@@ -28,6 +28,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.mhmtyldz.yldz.sosyalokur.Activities.ChangePasswordActivity;
 import com.mhmtyldz.yldz.sosyalokur.Activities.LoginActivity;
 import com.mhmtyldz.yldz.sosyalokur.Activities.ProfileActivity;
 import com.mhmtyldz.yldz.sosyalokur.Activities.RegisterActivity;
@@ -55,7 +56,7 @@ public class FragmentMyProfile extends Fragment {
     private CardView cardView;
     private TextView tvAlintiSayisi;
     private TextView textViewProfilKullaniciAdi;
-    private ImageView imgLogout, imgPp;
+    private ImageView imgLogout, imgPp, imgDelete,imgEdit;
 
     @Nullable
     @Override
@@ -253,9 +254,11 @@ public class FragmentMyProfile extends Fragment {
         btnAlintilariGoster = rootView.findViewById(R.id.btnAlintilariGoster);
         cardView = rootView.findViewById(R.id.cardView);
         tvAlintiSayisi = rootView.findViewById(R.id.tvAlintiSayisi);
+        imgDelete = rootView.findViewById(R.id.imgDelete);
         //tvOkumaListesiSayisi = rootView.findViewById(R.id.tvOkumaListesiSayisi);
         //tvOkuduguSayisi = rootView.findViewById(R.id.tvOkuduguSayisi);
         imgLogout = rootView.findViewById(R.id.imgLogout);
+        imgEdit = rootView.findViewById(R.id.imgEdit);
         imgPp = rootView.findViewById(R.id.imgPp);
         textViewProfilKullaniciAdi = rootView.findViewById(R.id.textViewProfilKullaniciAdi);
 
@@ -296,7 +299,80 @@ public class FragmentMyProfile extends Fragment {
             }
         });
 
+        imgDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Hesap siliniyor...", Toast.LENGTH_SHORT).show();
+                SharedPreferences sp = getContext().getSharedPreferences("girisBilgileri", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+                String email = sp.getString("email_adresi", "");
+
+                editor.putBoolean("girisYapildiMi", false);
+                editor.putString("email_adresi", "");
+                editor.putString("kullanici_adi", "");
+                editor.commit();
+
+                hesapSil(email);
+
+
+            }
+        });
+
+        imgEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), ChangePasswordActivity.class);
+                startActivity(intent);
+            }
+        });
+
         setUpRv();
+
+    }
+
+    private void hesapSil(String email) {
+        String url = "https://mehmetemin.xyz/sosyalOkur/deleteUser.php";
+        StringRequest postStringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String yanit = jsonObject.getString("success");
+
+                    if (yanit.equals("1")) {
+                        // başarıyla silindi ise:
+                        Intent intent = new Intent(getActivity(), LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        Toast.makeText(getContext(), "Hesabınız Silindi!", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(getContext(), "Bir hata oluştu", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("email", email);
+
+                return params;
+            }
+        };
+        Volley.newRequestQueue(getContext()).add(postStringRequest);
+
 
     }
 

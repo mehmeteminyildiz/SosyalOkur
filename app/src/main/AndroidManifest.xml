@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SosyalOkur">
         <activity
+            android:name=".Activities.ChangePasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activities.ForgotPasswordActivity"
             android:exported="false" />
         <activity
