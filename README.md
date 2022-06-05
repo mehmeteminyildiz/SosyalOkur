@@ -16,6 +16,6 @@ Linkedin: [Linkedin adresi](https://www.linkedin.com/in/yildizmehmetemin/)
 Google Play: [Google Play Geliştirici Hesabım](https://play.google.com/store/apps/dev?id=6782363722261399622)  
 Email: <mhmtxyildiz@gmail.com>
 
-Ad Soyad: Uğur Bebe
-Linkedin: [Linkedin adresi](https://www.linkedin.com/in/u%C4%9Fur-bebe-baa6791b4/)
-Email: <ugur.bb72@gmail.com>
+Ad Soyad: Uğur Bebe  
+Linkedin: [Linkedin adresi](https://www.linkedin.com/in/u%C4%9Fur-bebe-baa6791b4/)  
+Email: <ugur.bb72@gmail.com>  
